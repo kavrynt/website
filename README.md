@@ -1,2 +1,2 @@
-# website
-webite
+# Kavrynt Website
+Static GitHub Pages website.
