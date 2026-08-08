@@ -1,25 +1,76 @@
-<!DOCTYPE html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
-<title>Kavrynt</title><link rel='stylesheet' href='css/style.css'></head>
-<body><nav><div><b>Kavrynt</b></div><div>
-<a href='index.html'>Home</a><a href='vision.html'>Vision</a><a href='roadmap.html'>Roadmap</a><a href='docs.html'>Docs</a></div></nav><section class='hero'>
-<div><img src='assets/kavrynt-logo.png' alt='logo'></div>
-<div><h1>Kavrynt</h1><h3>Deploy. Secure. Operate.</h3>
-<p><b>The Open Source AI Infrastructure Platform</b></p>
-<p>Build, deploy, secure and operate AI infrastructure on Kubernetes using GitOps and cloud-native principles.</p>
-<a class='btn' href='https://github.com/kavrynt'>GitHub</a>
-<a class='btn' href='vision.html'>Read Vision</a></div></section>
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Kavrynt — Deploy. Secure. Operate.">
+<title>Kavrynt — Deploy. Secure. Operate.</title>
+<link rel="icon" href="assets/img/logo.svg"><link rel="stylesheet" href="assets/css/style.css">
+</head><body>
+<div class="topline">KAVRYNT MVP <span>MAP SERVER → SECURE DEPLOYMENT → KUBERNETES</span></div>
+<header><nav class="nav shell">
+<a class="brand" href="index.html"><img src="assets/img/logo.svg"><b>Kavrynt</b></a>
+<div class="links"><a href="index.html">Home</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a><a href="docs.html">Docs</a></div>
+<a class="github" href="https://github.com/kavrynt" target="_blank">GitHub ↗</a><button class="menu">☰</button>
+</nav></header>
 
-<section id='idea' class='section'><h2>What is Kavrynt?</h2>
-<p>Kavrynt is an open-source AI infrastructure platform for deploying, securing and operating AI workloads on Kubernetes.</p></section>
+<section class="hero shell reveal">
+<div>
+<div class="eyebrow">OPEN SOURCE INFRASTRUCTURE</div>
+<h1>Deploy.<br><em>Secure.</em><br>Operate.</h1>
+<p>Kavrynt is building a controlled infrastructure lifecycle for Kubernetes — starting with a simple problem: <strong>how do we get the right version of a workload safely into production, every time?</strong></p>
+<div class="actions"><a class="btn primary" href="#mvp">See the MVP ↓</a><a class="btn" href="https://github.com/kavrynt" target="_blank">Explore GitHub ↗</a></div>
+<div class="meta">GITOPS · SECURITY · KUBERNETES · VERSION CONTROL</div>
+</div>
+<div class="hero-art"><div class="halo"></div><div class="hero-card">
+<small>KAVRYNT CONTROL</small><span class="ready">● SYSTEM READY</span>
+<div class="hero-flow"><b>SOURCE</b><i></i><b class="cyan">TRUST</b><i></i><b class="violet">DEPLOY</b></div>
+<footer>Desired state → Verified artifact → Healthy runtime</footer>
+</div></div>
+</section>
 
-<section class='section'><h2>Why are we building it?</h2>
-<p>AI infrastructure today lacks standardized lifecycle management, governance, GitOps workflows and operational tooling. Kavrynt aims to provide a Kubernetes-inspired control plane for AI infrastructure.</p></section>
+<section class="statement"><div class="shell"><small>THE PROBLEM</small><h2>Infrastructure changes should have<br><em>a controlled path to production.</em></h2></div></section>
 
-<section class='section'><h2>Core Components</h2>
-<div class='cards'>
-<div class='card'><h3>Gateway</h3><p>Secure routing and discovery.</p></div>
-<div class='card'><h3>Operator</h3><p>Kubernetes-native lifecycle management.</p></div>
-<div class='card'><h3>Registry</h3><p>Versioned AI components.</p></div>
-<div class='card'><h3>kavryctl</h3><p>Developer CLI.</p></div>
+<section class="section shell" id="mvp">
+<div class="head reveal"><div class="eyebrow">THE KAVRYNT MVP</div><h2>From Map Server source<br><em>to a trusted runtime.</em></h2><p>Our first implementation is concrete: track the version, build it, secure it, verify it and deploy it to Kubernetes.</p></div>
+
+<div class="pipeline-box reveal">
+<div class="pipeline-head"><span>● LIVE DEPLOYMENT PATH</span><b id="runStatus">RUNNING</b></div>
+<div class="pipeline">
+<div class="stage" data-stage="1"><small>01 · SOURCE</small><strong>Map Server</strong><label>Source repository</label><em>COMMITTED</em></div>
+<div class="connector"><i></i></div>
+<div class="stage" data-stage="2"><small>02 · VERSION</small><strong>Version</strong><label>Immutable release</label><em>v1.0.7</em></div>
+<div class="connector"><i></i></div>
+<div class="stage" data-stage="3"><small>03 · BUILD</small><strong>Build</strong><label>Container artifact</label><em>READY</em></div>
+<div class="connector"><i></i></div>
+<div class="stage" data-stage="4"><small>04 · SECURITY</small><strong>Scan + Sign</strong><label>Trust verification</label><em>VERIFIED</em></div>
+<div class="connector"><i></i></div>
+<div class="stage" data-stage="5"><small>05 · POLICY</small><strong>Verify</strong><label>Deployment policy</label><em>ALLOWED</em></div>
+<div class="connector"><i></i></div>
+<div class="stage" data-stage="6"><small>06 · RUNTIME</small><strong>Kubernetes</strong><label>Map Server running</label><em>HEALTHY</em></div>
+</div>
+<div class="control"><b>◈ Kavrynt</b><span>Version control</span><span>Artifact provenance</span><span>Security policy</span><span>Deployment state</span><span>Runtime health</span></div>
+<div class="caption">Every artifact has a history. · Every deployment has a reason. · Every runtime has a desired state.</div>
+</div>
+</section>
+
+<section class="section shell">
+<div class="head reveal"><div class="eyebrow">WHY KAVRYNT</div><h2>The deployment problem<br><em>is bigger than deployment.</em></h2></div>
+<div class="cards">
+<article><b>01</b><h3>Version drift</h3><p>Know exactly which source, image and configuration reached production.</p></article>
+<article><b>02</b><h3>Security gaps</h3><p>Connect scanning, signing and verification directly to deployment.</p></article>
+<article><b>03</b><h3>Operational glue</h3><p>Replace scattered scripts and manual steps with a controlled lifecycle.</p></article>
+<article><b>04</b><h3>Rollback uncertainty</h3><p>Make every change traceable so recovery does not require archaeology.</p></article>
+</div>
+</section>
+
+<section class="dark-section"><div class="section shell">
+<div class="head center reveal"><div class="eyebrow">THE KAVRYNT LOOP</div><h2>Desired state in Git.<br><em>Trusted state in production.</em></h2><p>Kavrynt connects intent, verification and runtime into one observable lifecycle.</p></div>
+<div class="loop reveal"><div>DEVELOPER<small>Defines intent</small></div><b>→</b><div>GIT<small>Records desired state</small></div><b>→</b><div class="active">KAVRYNT<small>Verifies + reconciles</small></div><b>→</b><div>KUBERNETES<small>Runs workload</small></div></div>
 </div></section>
-<footer>© 2026 Kavrynt • Deploy. Secure. Operate.</footer><script src='js/main.js'></script></body></html>
+
+<section class="section shell"><div class="head reveal"><div class="eyebrow">ARCHITECTURE</div><h2>Small enough to understand.<br><em>Strong enough to evolve.</em></h2></div>
+<div class="architecture reveal"><div><b>01</b><h3>Intent</h3><p>Git repositories, workload definitions and version declarations.</p><span>GitOps</span></div><div class="active"><b>02</b><h3>Control</h3><p>Policy, provenance, reconciliation and deployment decisions.</p><span>Kavrynt</span></div><div><b>03</b><h3>Runtime</h3><p>Kubernetes workloads, health signals and operational state.</p><span>Kubernetes</span></div></div></section>
+
+<section class="cta"><div class="shell center"><div class="eyebrow">BUILDING IN THE OPEN</div><h2>Infrastructure you<br><em>can trust.</em></h2><p>Kavrynt is an open-source project. Follow the architecture, inspect the code and build with us.</p><div class="actions center"><a class="btn primary" href="https://github.com/kavrynt" target="_blank">Join on GitHub ↗</a><a class="btn" href="docs.html">Read the docs →</a></div></div></section>
+
+<footer class="footer shell"><div class="brand"><img src="assets/img/logo.svg"><b>Kavrynt</b><span>Deploy. Secure. Operate.</span></div><div class="footlinks"><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a><a href="docs.html">Docs</a><a href="https://github.com/kavrynt">GitHub</a></div><small>© 2026 Kavrynt · Open-source infrastructure for Kubernetes.</small></footer>
+<script src="assets/js/main.js"></script></body></html>
