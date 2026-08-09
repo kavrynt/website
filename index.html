@@ -1,76 +1,100 @@
 <!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Kavrynt — Deploy. Secure. Operate.">
-<title>Kavrynt — Deploy. Secure. Operate.</title>
-<link rel="icon" href="assets/img/logo.svg"><link rel="stylesheet" href="assets/css/style.css">
-</head><body>
-<div class="topline">KAVRYNT MVP <span>MAP SERVER → SECURE DEPLOYMENT → KUBERNETES</span></div>
-<header><nav class="nav shell">
-<a class="brand" href="index.html"><img src="assets/img/logo.svg"><b>Kavrynt</b></a>
-<div class="links"><a href="index.html">Home</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a><a href="docs.html">Docs</a></div>
-<a class="github" href="https://github.com/kavrynt" target="_blank">GitHub ↗</a><button class="menu">☰</button>
-</nav></header>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Kavrynt is open-source infrastructure for running MCP servers and AI agents on Kubernetes.">
+<title>Kavrynt - Open-source MCP infrastructure</title>
+<link rel="icon" href="assets/img/logo.svg">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<div class="topline">KAVRYNT MVP <span>MCP SERVERS -> REGISTRY -> GATEWAY -> KUBERNETES</span></div>
+<header>
+<nav class="nav shell">
+<a class="brand" href="index.html"><img src="assets/img/logo.svg" alt=""><b>Kavrynt</b></a>
+<div class="links"><a href="index.html">Home</a><a href="quickstart.html">Quickstart</a><a href="docs.html">Docs</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a></div>
+<a class="github" href="https://github.com/kavrynt" target="_blank" rel="noreferrer">GitHub</a><button class="menu" aria-label="Open menu">&#9776;</button>
+</nav>
+</header>
 
+<main>
 <section class="hero shell reveal">
 <div>
-<div class="eyebrow">OPEN SOURCE INFRASTRUCTURE</div>
-<h1>Deploy.<br><em>Secure.</em><br>Operate.</h1>
-<p>Kavrynt is building a controlled infrastructure lifecycle for Kubernetes — starting with a simple problem: <strong>how do we get the right version of a workload safely into production, every time?</strong></p>
-<div class="actions"><a class="btn primary" href="#mvp">See the MVP ↓</a><a class="btn" href="https://github.com/kavrynt" target="_blank">Explore GitHub ↗</a></div>
-<div class="meta">GITOPS · SECURITY · KUBERNETES · VERSION CONTROL</div>
+<div class="eyebrow">OPEN SOURCE AI INFRASTRUCTURE</div>
+<h1>MCP<br><em>control</em><br>plane.</h1>
+<p>Kavrynt helps platform teams register, operate, and route production MCP servers for AI agents. The MVP is a local Kubernetes stack with a CLI, Registry, Gateway, and Operator.</p>
+<div class="actions"><a class="btn primary" href="quickstart.html">Run the local demo</a><a class="btn" href="https://github.com/kavrynt" target="_blank" rel="noreferrer">Explore GitHub</a></div>
+<div class="meta">OPEN SOURCE &middot; MCP &middot; KUBERNETES &middot; AI AGENTS</div>
 </div>
-<div class="hero-art"><div class="halo"></div><div class="hero-card">
-<small>KAVRYNT CONTROL</small><span class="ready">● SYSTEM READY</span>
-<div class="hero-flow"><b>SOURCE</b><i></i><b class="cyan">TRUST</b><i></i><b class="violet">DEPLOY</b></div>
-<footer>Desired state → Verified artifact → Healthy runtime</footer>
-</div></div>
+<div class="hero-art">
+<div class="halo"></div>
+<div class="hero-card">
+<small>KAVRYNT ROUTING PLANE</small><span class="ready">&#9679; KIND TESTED</span>
+<div class="hero-flow"><b>kavryctl</b><i></i><b class="cyan">Registry</b><i></i><b class="violet">Gateway</b></div>
+<footer>Register MCP servers -> sync routes -> proxy agent traffic</footer>
+</div>
+</div>
 </section>
 
-<section class="statement"><div class="shell"><small>THE PROBLEM</small><h2>Infrastructure changes should have<br><em>a controlled path to production.</em></h2></div></section>
+<section class="statement"><div class="shell"><small>THE PROBLEM</small><h2>AI agents need MCP servers.<br><em>Teams need control.</em></h2></div></section>
 
 <section class="section shell" id="mvp">
-<div class="head reveal"><div class="eyebrow">THE KAVRYNT MVP</div><h2>From Map Server source<br><em>to a trusted runtime.</em></h2><p>Our first implementation is concrete: track the version, build it, secure it, verify it and deploy it to Kubernetes.</p></div>
-
+<div class="head reveal"><div class="eyebrow">THE KAVRYNT MVP</div><h2>One local path from manifest<br><em>to routed MCP traffic.</em></h2><p>Developers can define an MCP server, sync it into Registry, and route traffic through Gateway on a local Kind cluster.</p></div>
 <div class="pipeline-box reveal">
-<div class="pipeline-head"><span>● LIVE DEPLOYMENT PATH</span><b id="runStatus">RUNNING</b></div>
+<div class="pipeline-head"><span>&#9679; LOCAL KIND VALIDATION PATH</span><b id="runStatus">RUNNING</b></div>
 <div class="pipeline">
-<div class="stage" data-stage="1"><small>01 · SOURCE</small><strong>Map Server</strong><label>Source repository</label><em>COMMITTED</em></div>
+<div class="stage" data-stage="1"><small>01 &middot; CLIENT</small><strong>kavryctl</strong><label>Developer CLI</label><em>INSTALLED</em></div>
 <div class="connector"><i></i></div>
-<div class="stage" data-stage="2"><small>02 · VERSION</small><strong>Version</strong><label>Immutable release</label><em>v1.0.7</em></div>
+<div class="stage" data-stage="2"><small>02 &middot; INTENT</small><strong>MCPServer</strong><label>Kubernetes CR</label><em>APPLIED</em></div>
 <div class="connector"><i></i></div>
-<div class="stage" data-stage="3"><small>03 · BUILD</small><strong>Build</strong><label>Container artifact</label><em>READY</em></div>
+<div class="stage" data-stage="3"><small>03 &middot; CONTROL</small><strong>Operator</strong><label>Reconcile loop</label><em>SYNCED</em></div>
 <div class="connector"><i></i></div>
-<div class="stage" data-stage="4"><small>04 · SECURITY</small><strong>Scan + Sign</strong><label>Trust verification</label><em>VERIFIED</em></div>
+<div class="stage" data-stage="4"><small>04 &middot; SOURCE</small><strong>Registry</strong><label>Server record</label><em>READY</em></div>
 <div class="connector"><i></i></div>
-<div class="stage" data-stage="5"><small>05 · POLICY</small><strong>Verify</strong><label>Deployment policy</label><em>ALLOWED</em></div>
+<div class="stage" data-stage="5"><small>05 &middot; DATA PLANE</small><strong>Gateway</strong><label>Route table</label><em>LOADED</em></div>
 <div class="connector"><i></i></div>
-<div class="stage" data-stage="6"><small>06 · RUNTIME</small><strong>Kubernetes</strong><label>Map Server running</label><em>HEALTHY</em></div>
+<div class="stage" data-stage="6"><small>06 &middot; AGENT</small><strong>MCP Traffic</strong><label>HTTP proxy</label><em>ROUTED</em></div>
 </div>
-<div class="control"><b>◈ Kavrynt</b><span>Version control</span><span>Artifact provenance</span><span>Security policy</span><span>Deployment state</span><span>Runtime health</span></div>
-<div class="caption">Every artifact has a history. · Every deployment has a reason. · Every runtime has a desired state.</div>
+<div class="control"><b>&#9670; Kavrynt</b><span>Registry API</span><span>Gateway routing</span><span>Kubernetes CRD</span><span>Helm install</span><span>Local demo</span></div>
+<div class="caption">One CLI. &middot; One Registry. &middot; One Gateway. &middot; One Kubernetes-native control loop.</div>
 </div>
 </section>
 
 <section class="section shell">
-<div class="head reveal"><div class="eyebrow">WHY KAVRYNT</div><h2>The deployment problem<br><em>is bigger than deployment.</em></h2></div>
+<div class="head reveal"><div class="eyebrow">COMPONENTS</div><h2>Small pieces with<br><em>clear responsibilities.</em></h2></div>
 <div class="cards">
-<article><b>01</b><h3>Version drift</h3><p>Know exactly which source, image and configuration reached production.</p></article>
-<article><b>02</b><h3>Security gaps</h3><p>Connect scanning, signing and verification directly to deployment.</p></article>
-<article><b>03</b><h3>Operational glue</h3><p>Replace scattered scripts and manual steps with a controlled lifecycle.</p></article>
-<article><b>04</b><h3>Rollback uncertainty</h3><p>Make every change traceable so recovery does not require archaeology.</p></article>
+<article><b>01</b><h3>kavryctl</h3><p>CLI for registering, inspecting, and testing MCP server definitions.</p></article>
+<article><b>02</b><h3>Registry</h3><p>Source of truth for MCP server metadata and routeable endpoints.</p></article>
+<article><b>03</b><h3>Gateway</h3><p>Data-plane entry point that routes AI client traffic to MCP servers.</p></article>
+<article><b>04</b><h3>Operator</h3><p>Kubernetes controller that syncs MCPServer resources into Registry.</p></article>
 </div>
 </section>
 
 <section class="dark-section"><div class="section shell">
-<div class="head center reveal"><div class="eyebrow">THE KAVRYNT LOOP</div><h2>Desired state in Git.<br><em>Trusted state in production.</em></h2><p>Kavrynt connects intent, verification and runtime into one observable lifecycle.</p></div>
-<div class="loop reveal"><div>DEVELOPER<small>Defines intent</small></div><b>→</b><div>GIT<small>Records desired state</small></div><b>→</b><div class="active">KAVRYNT<small>Verifies + reconciles</small></div><b>→</b><div>KUBERNETES<small>Runs workload</small></div></div>
+<div class="head center reveal"><div class="eyebrow">TRY IT LOCALLY</div><h2>Run Kavrynt on Kind.<br><em>No cloud required.</em></h2><p>The first public alpha target is a repeatable local demo that developers can run on their laptop with Docker, Kind, Helm, and kubectl.</p></div>
+<div class="code-panel reveal"><pre><code>curl -fsSL https://kavrynt.com/install.sh | sh
+kavryctl version
+
+# Public alpha target
+kavryctl demo kind up
+kavryctl demo kind test
+kavryctl demo kind down</code></pre></div>
 </div></section>
 
-<section class="section shell"><div class="head reveal"><div class="eyebrow">ARCHITECTURE</div><h2>Small enough to understand.<br><em>Strong enough to evolve.</em></h2></div>
-<div class="architecture reveal"><div><b>01</b><h3>Intent</h3><p>Git repositories, workload definitions and version declarations.</p><span>GitOps</span></div><div class="active"><b>02</b><h3>Control</h3><p>Policy, provenance, reconciliation and deployment decisions.</p><span>Kavrynt</span></div><div><b>03</b><h3>Runtime</h3><p>Kubernetes workloads, health signals and operational state.</p><span>Kubernetes</span></div></div></section>
+<section class="section shell">
+<div class="head reveal"><div class="eyebrow">ARCHITECTURE</div><h2>Built for local testing first,<br><em>then production hardening.</em></h2></div>
+<div class="architecture reveal">
+<div><b>01</b><h3>Developer</h3><p>Installs kavryctl and declares MCP server intent.</p><span>CLI</span></div>
+<div class="active"><b>02</b><h3>Control Plane</h3><p>Registry and Operator keep server metadata in sync.</p><span>Kavrynt</span></div>
+<div><b>03</b><h3>Data Plane</h3><p>Gateway exposes stable MCP routing for AI clients.</p><span>MCP</span></div>
+</div>
+</section>
 
-<section class="cta"><div class="shell center"><div class="eyebrow">BUILDING IN THE OPEN</div><h2>Infrastructure you<br><em>can trust.</em></h2><p>Kavrynt is an open-source project. Follow the architecture, inspect the code and build with us.</p><div class="actions center"><a class="btn primary" href="https://github.com/kavrynt" target="_blank">Join on GitHub ↗</a><a class="btn" href="docs.html">Read the docs →</a></div></div></section>
+<section class="cta"><div class="shell center"><div class="eyebrow">BUILDING IN THE OPEN</div><h2>Bring control<br><em>to MCP operations.</em></h2><p>Kavrynt is moving toward a public alpha for developers who want to test MCP infrastructure locally and contribute to the platform.</p><div class="actions center"><a class="btn primary" href="quickstart.html">Start quickstart</a><a class="btn" href="https://github.com/kavrynt" target="_blank" rel="noreferrer">View GitHub</a></div></div></section>
+</main>
 
-<footer class="footer shell"><div class="brand"><img src="assets/img/logo.svg"><b>Kavrynt</b><span>Deploy. Secure. Operate.</span></div><div class="footlinks"><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a><a href="docs.html">Docs</a><a href="https://github.com/kavrynt">GitHub</a></div><small>© 2026 Kavrynt · Open-source infrastructure for Kubernetes.</small></footer>
-<script src="assets/js/main.js"></script></body></html>
+<footer class="footer shell"><div class="brand"><img src="assets/img/logo.svg" alt=""><b>Kavrynt</b><span>Open-source MCP infrastructure.</span></div><div class="footlinks"><a href="quickstart.html">Quickstart</a><a href="docs.html">Docs</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a><a href="https://github.com/kavrynt">GitHub</a></div><small>&copy; 2026 Kavrynt &middot; Open-source infrastructure for MCP servers and AI agents.</small></footer>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

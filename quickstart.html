@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Install Kavrynt and run the local Kind MVP demo.">
+<title>Quickstart - Kavrynt</title>
+<link rel="icon" href="assets/img/logo.svg">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<div class="topline">KAVRYNT <span>LOCAL QUICKSTART</span></div>
+<header>
+<nav class="nav shell">
+<a class="brand" href="index.html"><img src="assets/img/logo.svg" alt=""><b>Kavrynt</b></a>
+<div class="links"><a href="index.html">Home</a><a href="quickstart.html">Quickstart</a><a href="docs.html">Docs</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a></div>
+<a class="github" href="https://github.com/kavrynt" target="_blank" rel="noreferrer">GitHub</a><button class="menu" aria-label="Open menu">&#9776;</button>
+</nav>
+</header>
+
+<main>
+<section class="inner shell reveal">
+<div class="eyebrow">DEVELOPER QUICKSTART</div>
+<h1>Run Kavrynt<br><em>on your laptop.</em></h1>
+<p>This is the planned public alpha path for testing Kavrynt with Docker, Kind, kubectl, and Helm.</p>
+</section>
+
+<section class="section shell docs">
+<article>
+<b>01</b>
+<h2>Prerequisites</h2>
+<p>Install these first. Kavrynt uses them to create a local Kubernetes cluster and run the MVP components.</p>
+<pre><code>docker version
+kind version
+kubectl version --client
+helm version</code></pre>
+</article>
+
+<article>
+<b>02</b>
+<h2>Install kavryctl</h2>
+<p>The installer expects published GitHub release assets. Until the first release is published, build from source from the kavryctl repository.</p>
+<pre><code>curl -fsSL https://kavrynt.com/install.sh | sh
+kavryctl version</code></pre>
+</article>
+
+<article>
+<b>03</b>
+<h2>Run local demo</h2>
+<p>The target developer workflow is one command to create the cluster, deploy Kavrynt, register a mock MCP server, and verify Gateway routing.</p>
+<pre><code>kavryctl demo kind up
+kavryctl demo kind status
+kavryctl demo kind test</code></pre>
+</article>
+
+<article>
+<b>04</b>
+<h2>Manual test path</h2>
+<p>For early contributors, the current manual path uses Helm charts and local images from the component repositories.</p>
+<pre><code>kind create cluster --name kavrynt-mvp
+docker build -t kavrynt/registry:dev ../registry
+docker build -t kavrynt/gateway:dev ../gateway
+docker build -t kavrynt/k8s-operator:dev ../k8s-operator
+kind load docker-image kavrynt/registry:dev --name kavrynt-mvp
+kind load docker-image kavrynt/gateway:dev --name kavrynt-mvp
+kind load docker-image kavrynt/k8s-operator:dev --name kavrynt-mvp</code></pre>
+</article>
+</section>
+
+<section class="section shell">
+<div class="head reveal"><div class="eyebrow">EXPECTED RESULT</div><h2>A working MCP route<br><em>through Gateway.</em></h2></div>
+<div class="code-panel reveal"><pre><code>curl -fsS http://127.0.0.1:18080/v1/routes
+curl -fsS -X POST http://127.0.0.1:18080/mcp/demo-mcp/tools/list \
+  -H 'Content-Type: application/json' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}'</code></pre></div>
+<p class="note">Expected proxy response in the MVP demo: <code>{"method":"POST","mock":true,"path":"/tools/list","route":"demo-mcp"}</code></p>
+</section>
+
+<section class="section shell">
+<div class="head reveal"><div class="eyebrow">PUBLIC ALPHA IMAGES</div><h2>Container images<br><em>for local installs.</em></h2></div>
+<div class="code-panel reveal"><pre><code>docker pull kavrynt/registry:0.1.0-alpha.1
+docker pull kavrynt/gateway:0.1.0-alpha.1
+docker pull kavrynt/k8s-operator:0.1.0-alpha.1</code></pre></div>
+<p class="note">These tags should be published after the matching source commits are pushed and the repositories are ready for public alpha.</p>
+</section>
+
+<section class="section shell">
+<div class="head reveal"><div class="eyebrow">CLEANUP</div><h2>Remove the local cluster<br><em>when finished.</em></h2></div>
+<div class="code-panel reveal"><pre><code>kavryctl demo kind down
+
+# Manual fallback
+kind delete cluster --name kavrynt-mvp</code></pre></div>
+</section>
+</main>
+
+<footer class="footer shell"><div class="brand"><img src="assets/img/logo.svg" alt=""><b>Kavrynt</b></div><div class="footlinks"><a href="index.html">Home</a><a href="quickstart.html">Quickstart</a><a href="docs.html">Docs</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a></div><small>&copy; 2026 Kavrynt &middot; Open-source MCP infrastructure.</small></footer>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

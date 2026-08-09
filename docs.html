@@ -1,7 +1,83 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DOCS — Kavrynt</title><link rel="icon" href="assets/img/logo.svg"><link rel="stylesheet" href="assets/css/style.css"></head><body><div class="topline">KAVRYNT <span>DOCS</span></div><header><nav class="nav shell"><a class="brand" href="index.html"><img src="assets/img/logo.svg"><b>Kavrynt</b></a><div class="links"><a href="index.html">Home</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a><a href="docs.html">Docs</a></div><a class="github" href="https://github.com/kavrynt">GitHub ↗</a><button class="menu">☰</button></nav></header><main><section class="inner shell reveal"><div class="eyebrow">DOCUMENTATION</div><h1>Understand it.<br><em>Build it.</em></h1><p>Kavrynt documentation captures the reasoning behind the platform — not just commands.</p></section><section class="section shell docs"><article><b>01</b><h2>Architecture</h2><pre>Git → Kavrynt → Kubernetes
-     ├ Version
-     ├ Policy
-     ├ Provenance
-     └ Reconciliation</pre></article><article><b>02</b><h2>MVP lifecycle</h2><pre>commit → version → build
-       → scan → sign → verify
-       → deploy → health</pre></article><article><b>03</b><h2>Security</h2><p>Scanning, signing, provenance and deployment-time verification belong directly on the path to production.</p></article><article><b>04</b><h2>Contributing</h2><p>Start with product context, then RFCs, HLDs and LLDs. Architecture decisions should be explainable before implementation.</p><a class="btn primary" href="https://github.com/kavrynt" target="_blank">Open GitHub ↗</a></article></section></main><footer class="footer shell"><div class="brand"><img src="assets/img/logo.svg"><b>Kavrynt</b></div><div class="footlinks"><a href="index.html">Home</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a><a href="docs.html">Docs</a></div><small>© 2026 Kavrynt · Deploy. Secure. Operate.</small></footer><script src="assets/js/main.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Kavrynt documentation for the MCP infrastructure MVP.">
+<title>Docs - Kavrynt</title>
+<link rel="icon" href="assets/img/logo.svg">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<div class="topline">KAVRYNT <span>DOCS</span></div>
+<header>
+<nav class="nav shell">
+<a class="brand" href="index.html"><img src="assets/img/logo.svg" alt=""><b>Kavrynt</b></a>
+<div class="links"><a href="index.html">Home</a><a href="quickstart.html">Quickstart</a><a href="docs.html">Docs</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a></div>
+<a class="github" href="https://github.com/kavrynt" target="_blank" rel="noreferrer">GitHub</a><button class="menu" aria-label="Open menu">&#9776;</button>
+</nav>
+</header>
+
+<main>
+<section class="inner shell reveal">
+<div class="eyebrow">DOCUMENTATION</div>
+<h1>Understand it.<br><em>Operate it.</em></h1>
+<p>Kavrynt documentation explains the product, architecture, and local developer path for operating MCP servers on Kubernetes.</p>
+</section>
+
+<section class="section shell docs">
+<article>
+<b>01</b>
+<h2>Architecture</h2>
+<pre><code>AI client
+  -> Kavrynt Gateway
+  -> registered MCP server
+
+kavryctl / Operator
+  -> Kavrynt Registry
+  -> Gateway route table</code></pre>
+</article>
+<article>
+<b>02</b>
+<h2>MVP lifecycle</h2>
+<pre><code>define MCPServer
+  -> sync to Registry
+  -> Gateway loads route
+  -> client calls /mcp/&lt;name&gt;
+  -> upstream MCP server responds</code></pre>
+</article>
+<article>
+<b>03</b>
+<h2>Security baseline</h2>
+<p>The MVP uses non-root containers, read-only root filesystems, least-privilege RBAC, Helm validation, Docker builds, Go tests, vet, and vulnerability scanning in CI.</p>
+</article>
+<article>
+<b>04</b>
+<h2>Repositories</h2>
+<p>The public alpha should expose source code, docs, issues, releases, checksums, and contribution guidelines.</p>
+<a class="btn primary" href="https://github.com/kavrynt" target="_blank" rel="noreferrer">Open GitHub</a>
+</article>
+<article>
+<b>05</b>
+<h2>Docker images</h2>
+<pre><code>kavrynt/registry:0.1.0-alpha.1
+kavrynt/gateway:0.1.0-alpha.1
+kavrynt/k8s-operator:0.1.0-alpha.1</code></pre>
+</article>
+</section>
+
+<section class="section shell">
+<div class="head reveal"><div class="eyebrow">COMPONENT CONTRACTS</div><h2>What each component<br><em>owns in MVP.</em></h2></div>
+<div class="architecture reveal">
+<div><b>CLI</b><h3>kavryctl</h3><p>Registers, unregisters, lists, and inspects MCP server records through Registry.</p><span>client</span></div>
+<div class="active"><b>API</b><h3>Registry</h3><p>Stores MCP server manifests and exposes routeable server records.</p><span>control</span></div>
+<div><b>DATA</b><h3>Gateway</h3><p>Reads Registry, maintains routes, and proxies HTTP MCP requests.</p><span>runtime</span></div>
+<div><b>K8S</b><h3>Operator</h3><p>Watches MCPServer custom resources and syncs them into Registry.</p><span>native</span></div>
+</div>
+</section>
+</main>
+
+<footer class="footer shell"><div class="brand"><img src="assets/img/logo.svg" alt=""><b>Kavrynt</b></div><div class="footlinks"><a href="index.html">Home</a><a href="quickstart.html">Quickstart</a><a href="docs.html">Docs</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a></div><small>&copy; 2026 Kavrynt &middot; Open-source MCP infrastructure.</small></footer>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
