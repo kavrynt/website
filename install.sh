@@ -1,54 +1,100 @@
 #!/usr/bin/env sh
 set -eu
 
-repo="kavrynt/kavryctl"
-version="${KAVRYNT_VERSION:-latest}"
-install_dir="${KAVRYNT_INSTALL_DIR:-/usr/local/bin}"
+REPO="${KAVRYNT_REPO:-kavrynt/kavrynt}"
+VERSION="${KAVRYNT_VERSION:-latest}"
+INSTALL_DIR="${INSTALL_DIR:-${HOME}/.kavrynt/bin}"
 
-os="$(uname -s | tr '[:upper:]' '[:lower:]')"
-arch="$(uname -m)"
+log() {
+  printf '%s\n' "$*"
+}
 
-case "$os" in
-  darwin|linux) ;;
-  *) echo "Unsupported OS: $os" >&2; exit 1 ;;
-esac
+fail() {
+  printf 'error: %s\n' "$*" >&2
+  exit 1
+}
 
-case "$arch" in
-  x86_64|amd64) arch="amd64" ;;
-  arm64|aarch64) arch="arm64" ;;
-  *) echo "Unsupported architecture: $arch" >&2; exit 1 ;;
-esac
+need_cmd() {
+  command -v "$1" >/dev/null 2>&1 || fail "required command not found: $1"
+}
 
-archive="kavryctl-${os}-${arch}.tar.gz"
-base_url="https://github.com/${repo}/releases"
+detect_os() {
+  case "$(uname -s)" in
+    Linux) printf 'linux' ;;
+    Darwin) printf 'darwin' ;;
+    *) fail "unsupported operating system: $(uname -s)" ;;
+  esac
+}
 
-if [ "$version" = "latest" ]; then
-  url="${base_url}/latest/download/${archive}"
+detect_arch() {
+  case "$(uname -m)" in
+    x86_64 | amd64) printf 'amd64' ;;
+    arm64 | aarch64) printf 'arm64' ;;
+    *) fail "unsupported architecture: $(uname -m)" ;;
+  esac
+}
+
+download() {
+  url="$1"
+  output="$2"
+  if command -v curl >/dev/null 2>&1; then
+    curl -fsSL "$url" -o "$output"
+  elif command -v wget >/dev/null 2>&1; then
+    wget -q "$url" -O "$output"
+  else
+    fail "curl or wget is required"
+  fi
+}
+
+sha256_file() {
+  file="$1"
+  if command -v sha256sum >/dev/null 2>&1; then
+    sha256sum "$file" | awk '{print $1}'
+  elif command -v shasum >/dev/null 2>&1; then
+    shasum -a 256 "$file" | awk '{print $1}'
+  else
+    fail "sha256sum or shasum is required for checksum verification"
+  fi
+}
+
+need_cmd uname
+need_cmd tar
+need_cmd awk
+need_cmd grep
+
+os="$(detect_os)"
+arch="$(detect_arch)"
+archive="kavryctl_${os}_${arch}.tar.gz"
+
+if [ "$VERSION" = "latest" ]; then
+  base_url="https://github.com/${REPO}/releases/latest/download"
 else
-  url="${base_url}/download/${version}/${archive}"
+  base_url="https://github.com/${REPO}/releases/download/${VERSION}"
 fi
 
 tmp_dir="$(mktemp -d)"
-cleanup() {
-  rm -rf "$tmp_dir"
-}
-trap cleanup EXIT
+trap 'rm -rf "$tmp_dir"' EXIT INT TERM
 
-echo "Downloading ${url}"
-curl -fsSL "$url" -o "${tmp_dir}/${archive}"
-tar -xzf "${tmp_dir}/${archive}" -C "$tmp_dir"
+archive_path="${tmp_dir}/${archive}"
+checksums_path="${tmp_dir}/checksums.txt"
 
-if [ ! -x "${tmp_dir}/kavryctl" ]; then
-  echo "Archive did not contain executable kavryctl" >&2
-  exit 1
-fi
+log "Downloading ${archive} from ${REPO}..."
+download "${base_url}/${archive}" "$archive_path"
+download "${base_url}/checksums.txt" "$checksums_path"
 
-mkdir -p "$install_dir"
-if [ -w "$install_dir" ]; then
-  cp "${tmp_dir}/kavryctl" "${install_dir}/kavryctl"
-else
-  sudo cp "${tmp_dir}/kavryctl" "${install_dir}/kavryctl"
-fi
+expected="$(awk -v file="$archive" '$2 == file {print $1}' "$checksums_path")"
+[ -n "$expected" ] || fail "checksum for ${archive} not found"
 
-echo "Installed kavryctl to ${install_dir}/kavryctl"
-"${install_dir}/kavryctl" version
+actual="$(sha256_file "$archive_path")"
+[ "$actual" = "$expected" ] || fail "checksum mismatch for ${archive}"
+
+mkdir -p "$INSTALL_DIR"
+tar -xzf "$archive_path" -C "$tmp_dir" kavryctl
+install -m 0755 "${tmp_dir}/kavryctl" "${INSTALL_DIR}/kavryctl"
+
+log "Installed kavryctl to ${INSTALL_DIR}/kavryctl"
+case ":$PATH:" in
+  *":${INSTALL_DIR}:"*) ;;
+  *) log "Add ${INSTALL_DIR} to PATH to run kavryctl from any shell." ;;
+esac
+log "Run: kavryctl version"

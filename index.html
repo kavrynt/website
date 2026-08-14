@@ -72,14 +72,16 @@
 </section>
 
 <section class="dark-section"><div class="section shell">
-<div class="head center reveal"><div class="eyebrow">TRY IT LOCALLY</div><h2>Run Kavrynt on Kind.<br><em>No cloud required.</em></h2><p>The first public alpha target is a repeatable local demo that developers can run on their laptop with Docker, Kind, Helm, and kubectl.</p></div>
-<div class="code-panel reveal"><pre><code>curl -fsSL https://kavrynt.com/install.sh | sh
-kavryctl version
-
-# Public alpha target
-kavryctl demo kind up
-kavryctl demo kind test
-kavryctl demo kind down</code></pre></div>
+<div class="head center reveal"><div class="eyebrow">TRY IT LOCALLY</div><h2>Run Kavrynt on Kind.<br><em>No cloud required.</em></h2><p>The first public alpha path is a repeatable local install from the public monorepo with Docker, Kind, Helm, kubectl, and Docker Hub images.</p></div>
+<div class="code-panel reveal"><pre><code>git clone https://github.com/kavrynt/kavrynt.git
+cd kavrynt
+go install ./cmd/kavryctl
+kind create cluster --name kavrynt-dev
+helm dependency build charts/kavrynt
+helm upgrade --install kavrynt charts/kavrynt \
+  --namespace kavrynt-system \
+  --create-namespace
+kubectl get pods -n kavrynt-system</code></pre></div>
 </div></section>
 
 <section class="section shell">
@@ -91,7 +93,7 @@ kavryctl demo kind down</code></pre></div>
 </div>
 </section>
 
-<section class="cta"><div class="shell center"><div class="eyebrow">BUILDING IN THE OPEN</div><h2>Bring control<br><em>to MCP operations.</em></h2><p>Kavrynt is moving toward a public alpha for developers who want to test MCP infrastructure locally and contribute to the platform.</p><div class="actions center"><a class="btn primary" href="quickstart.html">Start quickstart</a><a class="btn" href="https://github.com/kavrynt" target="_blank" rel="noreferrer">View GitHub</a></div></div></section>
+<section class="cta"><div class="shell center"><div class="eyebrow">BUILDING IN THE OPEN</div><h2>Bring control<br><em>to MCP operations.</em></h2><p>Kavrynt is ready for early local MVP testing by developers who want to run MCP infrastructure on Kubernetes and contribute to the platform.</p><div class="actions center"><a class="btn primary" href="quickstart.html">Start quickstart</a><a class="btn" href="https://github.com/kavrynt/kavrynt" target="_blank" rel="noreferrer">View GitHub</a></div></div></section>
 </main>
 
 <footer class="footer shell"><div class="brand"><img src="assets/img/logo.svg" alt=""><b>Kavrynt</b><span>Open-source MCP infrastructure.</span></div><div class="footlinks"><a href="quickstart.html">Quickstart</a><a href="docs.html">Docs</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a><a href="https://github.com/kavrynt">GitHub</a></div><small>&copy; 2026 Kavrynt &middot; Open-source infrastructure for MCP servers and AI agents.</small></footer>

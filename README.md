@@ -11,7 +11,8 @@ Static GitHub Pages site. No Helm, backend or Node runtime required.
 
 ## Install script
 
-`install.sh` is designed for future `kavryctl` GitHub release assets:
+`install.sh` is designed for `kavryctl` GitHub release assets from the public
+`kavrynt/kavrynt` monorepo:
 
 ```bash
 curl -fsSL https://kavrynt.com/install.sh | sh
@@ -19,10 +20,10 @@ curl -fsSL https://kavrynt.com/install.sh | sh
 
 Expected release asset names:
 
-- `kavryctl-darwin-arm64.tar.gz`
-- `kavryctl-darwin-amd64.tar.gz`
-- `kavryctl-linux-arm64.tar.gz`
-- `kavryctl-linux-amd64.tar.gz`
+- `kavryctl_darwin_arm64.tar.gz`
+- `kavryctl_darwin_amd64.tar.gz`
+- `kavryctl_linux_arm64.tar.gz`
+- `kavryctl_linux_amd64.tar.gz`
 
 Each archive should contain an executable named `kavryctl`.
 
