@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Install Kavrynt on Kubernetes or use Kind for local MVP testing.">
-<title>Quickstart - Kavrynt</title>
+<meta name="description" content="Install Kavrynt with Helm on any Kubernetes cluster, or use Kind for local MVP testing.">
+<title>Install with Helm - Kavrynt</title>
 <link rel="icon" href="assets/img/kavrynt-logo.png">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-<div class="topline">KAVRYNT <span>KUBERNETES QUICKSTART</span></div>
+<div class="topline">KAVRYNT <span>HELM INSTALL</span></div>
 <header>
 <nav class="nav shell">
 <a class="brand" href="index.html"><span class="logo-mark"><img src="assets/img/kavrynt-logo.png" alt=""></span><b>Kavrynt</b></a>
@@ -20,18 +20,20 @@
 
 <main>
 <section class="inner shell reveal">
-<div class="eyebrow">DEVELOPER QUICKSTART</div>
-<h1>Run Kavrynt<br><em>on Kubernetes.</em></h1>
-<p>This public alpha path works on any Kubernetes cluster where you have kubectl access. Use Kind only when you want a disposable local test cluster.</p>
+<div class="eyebrow">INSTALL WITH HELM</div>
+<h1>Install Kavrynt<br><em>on Kubernetes.</em></h1>
+<p>Use the same flow for EKS, AKS, GKE, OpenShift, self-managed clusters, or Kind. Kind is only the disposable local test option.</p>
 </section>
 
 <section class="section shell docs">
 <article>
 <b>01</b>
-<h2>Prerequisites</h2>
-<p>Install these first. Docker and Kind are only required for local testing; managed cloud clusters only need kubectl access and Helm.</p>
+<h2>Before you begin</h2>
+<p>Confirm that your current Kubernetes context points at the cluster where Kavrynt should run. Docker and Kind are only needed for local testing.</p>
 <pre><code>kubectl version --client
 helm version
+kubectl config current-context
+kubectl get nodes
 
 # Local testing only
 docker version
@@ -41,41 +43,58 @@ kind version</code></pre>
 <article>
 <b>02</b>
 <h2>Install kavryctl</h2>
-<p>Until the first tagged release is published, install from the public monorepo. After releases are available, use the website installer.</p>
-<pre><code>git clone https://github.com/kavrynt/kavrynt.git
-cd kavrynt
-go install ./cmd/kavryctl
+<p>After the first release, install the CLI as a laptop executable. During MVP development, use the source fallback from the monorepo.</p>
+<pre><code># Linux and macOS release path
+curl -fsSL https://kavrynt.com/install.sh | sh
+export PATH="$HOME/.kavrynt/bin:$PATH"
 kavryctl version</code></pre>
+<pre><code># Current MVP source fallback
+git clone https://github.com/kavrynt/kavrynt.git
+cd kavrynt
+go install ./cmd/kavryctl</code></pre>
 </article>
 
 <article>
 <b>03</b>
-<h2>Choose a Kubernetes cluster</h2>
-<p>Use an existing EKS, AKS, GKE, OpenShift, self-managed, or other Kubernetes cluster. Create Kind only when testing locally.</p>
-<pre><code># Existing cluster path
+<h2>Use a cluster</h2>
+<p>Use your existing cloud or self-managed Kubernetes cluster. Create Kind only when you want a local cluster you can delete after testing.</p>
+<pre><code># Existing cluster
 kubectl config current-context
 kubectl get nodes
 
-# Local test path
-kind create cluster --name kavrynt-dev</code></pre>
+# Local test cluster
+kind create cluster --name kavrynt-dev
+kubectl cluster-info --context kind-kavrynt-dev</code></pre>
 </article>
 
 <article>
 <b>04</b>
-<h2>Install the control plane</h2>
-<p>Install Registry, Gateway, and Operator into the <code>kavrynt-system</code> namespace with Helm.</p>
-<pre><code>kubectl create namespace kavrynt-system --dry-run=client -o yaml | kubectl apply -f -
+<h2>Install from source chart</h2>
+<p>The MVP chart lives in the public monorepo and installs Registry, Gateway, and Operator into <code>kavrynt-system</code>.</p>
+<pre><code>git clone https://github.com/kavrynt/kavrynt.git
+cd kavrynt
 helm dependency build charts/kavrynt
 helm upgrade --install kavrynt charts/kavrynt \
-  --namespace kavrynt-system
+  --namespace kavrynt-system \
+  --create-namespace</code></pre>
+</article>
+
+<article>
+<b>05</b>
+<h2>Verify the install</h2>
+<p>Wait for the control-plane workloads and confirm that the CRD, pods, and services exist.</p>
+<pre><code>kubectl rollout status deployment/kavrynt-registry -n kavrynt-system --timeout=120s
+kubectl rollout status deployment/kavrynt-gateway -n kavrynt-system --timeout=120s
+kubectl rollout status deployment/kavrynt-operator -n kavrynt-system --timeout=120s
+kubectl get crd mcpservers.kavrynt.io
 kubectl get pods -n kavrynt-system
 kubectl get svc -n kavrynt-system</code></pre>
 </article>
 
 <article>
-<b>05</b>
+<b>06</b>
 <h2>Register a sample server</h2>
-<p>Deploy a temporary HTTP endpoint, then apply the sample <code>MCPServer</code> resource so the Operator syncs it into Registry.</p>
+<p>Deploy a temporary HTTP endpoint, then apply an <code>MCPServer</code> resource so the Operator syncs it into Registry.</p>
 <pre><code>kubectl create deployment example-mcp-server \
   --image=hashicorp/http-echo:1.0 \
   -- -listen=:8080 -text='{"mock":true,"service":"example-mcp-server"}'
@@ -86,9 +105,9 @@ kubectl describe mcpserver example-mcp-server</code></pre>
 </article>
 
 <article>
-<b>06</b>
-<h2>Release install path</h2>
-<p>After the first tagged release, developers should be able to install without building from source.</p>
+<b>07</b>
+<h2>Release chart path</h2>
+<p>After the first tagged release, install the packaged OCI Helm chart without cloning the repository.</p>
 <pre><code>curl -fsSL https://kavrynt.com/install.sh | sh
 helm upgrade --install kavrynt oci://ghcr.io/kavrynt/charts/kavrynt \
   --version 0.1.0 \
@@ -133,7 +152,7 @@ kind delete cluster --name kavrynt-dev</code></pre></div>
 </section>
 </main>
 
-<footer class="footer shell"><div class="brand"><span class="logo-mark"><img src="assets/img/kavrynt-logo.png" alt=""></span><b>Kavrynt</b></div><div class="footlinks"><a href="index.html">Home</a><a href="quickstart.html">Quickstart</a><a href="docs.html">Docs</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a></div><small>&copy; 2026 Kavrynt &middot; Open-source MCP infrastructure.</small></footer>
+<footer class="footer shell"><div class="brand"><span class="logo-mark"><img src="assets/img/kavrynt-logo.png" alt=""></span><b>Kavrynt</b></div><div class="footlinks"><a href="index.html">Home</a><a href="quickstart.html">Quickstart</a><a href="docs.html">Docs</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a></div><small>&copy; 2026 Kavrynt &middot; Source-available MCP infrastructure.</small></footer>
 <script src="assets/js/main.js"></script>
 </body>
 </html>
