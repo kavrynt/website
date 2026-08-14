@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Kavrynt is open-source infrastructure for running MCP servers and AI agents on Kubernetes.">
 <title>Kavrynt - Open-source MCP infrastructure</title>
-<link rel="icon" href="assets/img/logo.svg">
+<link rel="icon" href="assets/img/kavrynt-logo.png">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 <div class="topline">KAVRYNT MVP <span>MCP SERVERS -> REGISTRY -> GATEWAY -> KUBERNETES</span></div>
 <header>
 <nav class="nav shell">
-<a class="brand" href="index.html"><img src="assets/img/logo.svg" alt=""><b>Kavrynt</b></a>
+<a class="brand" href="index.html"><span class="logo-mark"><img src="assets/img/kavrynt-logo.png" alt=""></span><b>Kavrynt</b></a>
 <div class="links"><a href="index.html">Home</a><a href="quickstart.html">Quickstart</a><a href="docs.html">Docs</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a></div>
 <a class="github" href="https://github.com/kavrynt" target="_blank" rel="noreferrer">GitHub</a><button class="menu" aria-label="Open menu">&#9776;</button>
 </nav>
@@ -23,8 +23,8 @@
 <div>
 <div class="eyebrow">OPEN SOURCE AI INFRASTRUCTURE</div>
 <h1>MCP<br><em>control</em><br>plane.</h1>
-<p>Kavrynt helps platform teams register, operate, and route production MCP servers for AI agents. The MVP is a local Kubernetes stack with a CLI, Registry, Gateway, and Operator.</p>
-<div class="actions"><a class="btn primary" href="quickstart.html">Run the local demo</a><a class="btn" href="https://github.com/kavrynt" target="_blank" rel="noreferrer">Explore GitHub</a></div>
+<p>Kavrynt helps platform teams register, operate, and route production MCP servers for AI agents on Kubernetes. Use it on EKS, AKS, GKE, OpenShift, self-managed clusters, or Kind for local testing.</p>
+<div class="actions"><a class="btn primary" href="quickstart.html">Install on Kubernetes</a><a class="btn" href="https://github.com/kavrynt" target="_blank" rel="noreferrer">Explore GitHub</a></div>
 <div class="meta">OPEN SOURCE &middot; MCP &middot; KUBERNETES &middot; AI AGENTS</div>
 </div>
 <div class="hero-art">
@@ -40,9 +40,9 @@
 <section class="statement"><div class="shell"><small>THE PROBLEM</small><h2>AI agents need MCP servers.<br><em>Teams need control.</em></h2></div></section>
 
 <section class="section shell" id="mvp">
-<div class="head reveal"><div class="eyebrow">THE KAVRYNT MVP</div><h2>One local path from manifest<br><em>to routed MCP traffic.</em></h2><p>Developers can define an MCP server, sync it into Registry, and route traffic through Gateway on a local Kind cluster.</p></div>
+<div class="head reveal"><div class="eyebrow">THE KAVRYNT MVP</div><h2>One Kubernetes path from manifest<br><em>to routed MCP traffic.</em></h2><p>Developers can define an MCP server, sync it into Registry, and route traffic through Gateway on any Kubernetes cluster. Kind is only the local test option.</p></div>
 <div class="pipeline-box reveal">
-<div class="pipeline-head"><span>&#9679; LOCAL KIND VALIDATION PATH</span><b id="runStatus">RUNNING</b></div>
+<div class="pipeline-head"><span>&#9679; KUBERNETES CONTROL-PLANE PATH</span><b id="runStatus">RUNNING</b></div>
 <div class="pipeline">
 <div class="stage" data-stage="1"><small>01 &middot; CLIENT</small><strong>kavryctl</strong><label>Developer CLI</label><em>INSTALLED</em></div>
 <div class="connector"><i></i></div>
@@ -56,7 +56,7 @@
 <div class="connector"><i></i></div>
 <div class="stage" data-stage="6"><small>06 &middot; AGENT</small><strong>MCP Traffic</strong><label>HTTP proxy</label><em>ROUTED</em></div>
 </div>
-<div class="control"><b>&#9670; Kavrynt</b><span>Registry API</span><span>Gateway routing</span><span>Kubernetes CRD</span><span>Helm install</span><span>Local demo</span></div>
+<div class="control"><b>&#9670; Kavrynt</b><span>Registry API</span><span>Gateway routing</span><span>Kubernetes CRD</span><span>Helm install</span><span>Cloud or local</span></div>
 <div class="caption">One CLI. &middot; One Registry. &middot; One Gateway. &middot; One Kubernetes-native control loop.</div>
 </div>
 </section>
@@ -72,11 +72,16 @@
 </section>
 
 <section class="dark-section"><div class="section shell">
-<div class="head center reveal"><div class="eyebrow">TRY IT LOCALLY</div><h2>Run Kavrynt on Kind.<br><em>No cloud required.</em></h2><p>The first public alpha path is a repeatable local install from the public monorepo with Docker, Kind, Helm, kubectl, and Docker Hub images.</p></div>
+<div class="head center reveal"><div class="eyebrow">INSTALL ANYWHERE KUBERNETES RUNS</div><h2>Run Kavrynt on Kubernetes.<br><em>Use Kind only for local testing.</em></h2><p>The public alpha path works on an existing Kubernetes cluster with kubectl and Helm. Kind is useful when you want a disposable local cluster on your laptop.</p></div>
 <div class="code-panel reveal"><pre><code>git clone https://github.com/kavrynt/kavrynt.git
 cd kavrynt
 go install ./cmd/kavryctl
-kind create cluster --name kavrynt-dev
+kubectl config current-context
+kubectl get nodes
+
+# Local testing only
+# kind create cluster --name kavrynt-dev
+
 helm dependency build charts/kavrynt
 helm upgrade --install kavrynt charts/kavrynt \
   --namespace kavrynt-system \
@@ -85,7 +90,7 @@ kubectl get pods -n kavrynt-system</code></pre></div>
 </div></section>
 
 <section class="section shell">
-<div class="head reveal"><div class="eyebrow">ARCHITECTURE</div><h2>Built for local testing first,<br><em>then production hardening.</em></h2></div>
+<div class="head reveal"><div class="eyebrow">ARCHITECTURE</div><h2>Built for Kubernetes first,<br><em>then production hardening.</em></h2></div>
 <div class="architecture reveal">
 <div><b>01</b><h3>Developer</h3><p>Installs kavryctl and declares MCP server intent.</p><span>CLI</span></div>
 <div class="active"><b>02</b><h3>Control Plane</h3><p>Registry and Operator keep server metadata in sync.</p><span>Kavrynt</span></div>
@@ -93,10 +98,10 @@ kubectl get pods -n kavrynt-system</code></pre></div>
 </div>
 </section>
 
-<section class="cta"><div class="shell center"><div class="eyebrow">BUILDING IN THE OPEN</div><h2>Bring control<br><em>to MCP operations.</em></h2><p>Kavrynt is ready for early local MVP testing by developers who want to run MCP infrastructure on Kubernetes and contribute to the platform.</p><div class="actions center"><a class="btn primary" href="quickstart.html">Start quickstart</a><a class="btn" href="https://github.com/kavrynt/kavrynt" target="_blank" rel="noreferrer">View GitHub</a></div></div></section>
+<section class="cta"><div class="shell center"><div class="eyebrow">BUILDING IN THE OPEN</div><h2>Bring control<br><em>to MCP operations.</em></h2><p>Kavrynt is ready for early MVP testing by developers who want to run MCP infrastructure on Kubernetes, from local Kind clusters to managed cloud clusters.</p><div class="actions center"><a class="btn primary" href="quickstart.html">Start quickstart</a><a class="btn" href="https://github.com/kavrynt/kavrynt" target="_blank" rel="noreferrer">View GitHub</a></div></div></section>
 </main>
 
-<footer class="footer shell"><div class="brand"><img src="assets/img/logo.svg" alt=""><b>Kavrynt</b><span>Open-source MCP infrastructure.</span></div><div class="footlinks"><a href="quickstart.html">Quickstart</a><a href="docs.html">Docs</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a><a href="https://github.com/kavrynt">GitHub</a></div><small>&copy; 2026 Kavrynt &middot; Open-source infrastructure for MCP servers and AI agents.</small></footer>
+<footer class="footer shell"><div class="brand"><span class="logo-mark"><img src="assets/img/kavrynt-logo.png" alt=""></span><b>Kavrynt</b><span>Open-source MCP infrastructure.</span></div><div class="footlinks"><a href="quickstart.html">Quickstart</a><a href="docs.html">Docs</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a><a href="https://github.com/kavrynt">GitHub</a></div><small>&copy; 2026 Kavrynt &middot; Open-source infrastructure for MCP servers and AI agents.</small></footer>
 <script src="assets/js/main.js"></script>
 </body>
 </html>

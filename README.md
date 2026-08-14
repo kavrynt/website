@@ -4,7 +4,7 @@ Static GitHub Pages site. No Helm, backend or Node runtime required.
 
 ## Pages
 - `index.html` - main landing page for Kavrynt MCP infrastructure
-- `quickstart.html` - developer local demo and install path
+- `quickstart.html` - developer Kubernetes install path, with Kind for local testing
 - `docs.html` - architecture and MVP documentation
 - `vision.html` - product vision
 - `roadmap.html` - public alpha roadmap
@@ -29,7 +29,7 @@ Each archive should contain an executable named `kavryctl`.
 
 ## MVP visual
 
-kavryctl -> MCPServer -> Operator -> Registry -> Gateway -> MCP traffic
+kavryctl -> Kubernetes -> MCPServer -> Operator -> Registry -> Gateway -> MCP traffic
 
 The pipeline animation is pure CSS/JavaScript and loops continuously.
 
