@@ -4,10 +4,12 @@ Static GitHub Pages site. No Helm, backend or Node runtime required.
 
 ## Pages
 - `index.html` - main landing page for Kavrynt MCP infrastructure
-- `quickstart.html` - developer Kubernetes install path, with Kind for local testing
-- `docs.html` - architecture and MVP documentation
+- `docs.html` - compatibility redirect to https://docs.kavrynt.com/
 - `vision.html` - product vision
 - `roadmap.html` - public alpha roadmap
+
+Product documentation, installation guidance, architecture, and CLI reference
+are maintained at https://docs.kavrynt.com/.
 
 ## Install script
 

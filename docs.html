@@ -3,86 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Kavrynt documentation for the MCP infrastructure MVP.">
-<title>Docs - Kavrynt</title>
-<link rel="icon" href="assets/img/kavrynt-logo.png">
-<link rel="stylesheet" href="assets/css/style.css">
+<meta name="description" content="Kavrynt documentation for the MCP infrastructure control plane.">
+<meta http-equiv="refresh" content="0; url=https://docs.kavrynt.com/">
+<link rel="canonical" href="https://docs.kavrynt.com/">
+<title>Redirecting to Kavrynt Docs</title>
 </head>
 <body>
-<div class="topline">KAVRYNT <span>DOCS</span></div>
-<header>
-<nav class="nav shell">
-<a class="brand" href="index.html"><span class="logo-mark"><img src="assets/img/kavrynt-logo.png" alt=""></span><b>Kavrynt</b></a>
-<div class="links"><a href="index.html">Home</a><a href="quickstart.html">Quickstart</a><a href="docs.html">Docs</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a></div>
-<a class="github" href="https://github.com/kavrynt" target="_blank" rel="noreferrer">GitHub</a><button class="menu" aria-label="Open menu">&#9776;</button>
-</nav>
-</header>
-
-<main>
-<section class="inner shell reveal">
-<div class="eyebrow">DOCUMENTATION</div>
-<h1>Understand it.<br><em>Operate it.</em></h1>
-<p>Kavrynt documentation explains the product, architecture, and Kubernetes developer path for operating MCP servers across local, self-managed, and managed cloud clusters.</p>
-</section>
-
-<section class="section shell docs">
-<article>
-<b>01</b>
-<h2>Architecture</h2>
-<pre><code>AI client
-  -> Kavrynt Gateway
-  -> registered MCP server
-
-kavryctl / Operator
-  -> Kavrynt Registry
-  -> Gateway route table</code></pre>
-</article>
-<article>
-<b>02</b>
-<h2>MVP lifecycle</h2>
-<pre><code>define MCPServer
-  -> sync to Registry
-  -> Gateway loads route
-  -> client calls /mcp/&lt;name&gt;
-  -> upstream MCP server responds</code></pre>
-</article>
-<article>
-<b>03</b>
-<h2>Security baseline</h2>
-<p>The MVP uses non-root containers, read-only root filesystems, least-privilege RBAC, Helm validation, Docker builds, Go tests, vet, and vulnerability scanning in CI.</p>
-</article>
-<article>
-<b>04</b>
-<h2>Repositories</h2>
-<p>The public alpha exposes the monorepo source, docs, issues, release automation, checksums, and contribution guidance.</p>
-<a class="btn primary" href="https://github.com/kavrynt/kavrynt" target="_blank" rel="noreferrer">Open GitHub</a>
-</article>
-<article>
-<b>05</b>
-<h2>License</h2>
-<p>Kavrynt is source-available under Elastic License 2.0. The license allows use and modification but restricts offering Kavrynt as a competing hosted or managed service.</p>
-</article>
-<article>
-<b>06</b>
-<h2>Docker images</h2>
-<pre><code>kavrynt/registry:dev
-kavrynt/gateway:dev
-kavrynt/k8s-operator:dev</code></pre>
-</article>
-</section>
-
-<section class="section shell">
-<div class="head reveal"><div class="eyebrow">COMPONENT CONTRACTS</div><h2>What each component<br><em>owns in MVP.</em></h2></div>
-<div class="architecture reveal">
-<div><b>CLI</b><h3>kavryctl</h3><p>Registers, unregisters, lists, and inspects MCP server records through Registry.</p><span>client</span></div>
-<div class="active"><b>API</b><h3>Registry</h3><p>Stores MCP server manifests and exposes routeable server records.</p><span>control</span></div>
-<div><b>DATA</b><h3>Gateway</h3><p>Reads Registry, maintains routes, and proxies HTTP MCP requests.</p><span>runtime</span></div>
-<div><b>K8S</b><h3>Operator</h3><p>Watches MCPServer custom resources and syncs them into Registry.</p><span>native</span></div>
-</div>
-</section>
-</main>
-
-<footer class="footer shell"><div class="brand"><span class="logo-mark"><img src="assets/img/kavrynt-logo.png" alt=""></span><b>Kavrynt</b></div><div class="footlinks"><a href="index.html">Home</a><a href="quickstart.html">Quickstart</a><a href="docs.html">Docs</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a></div><small>&copy; 2026 Kavrynt &middot; Deploy. Secure. Operate.</small></footer>
-<script src="assets/js/main.js"></script>
+<main><p>Continue to <a href="https://docs.kavrynt.com/">docs.kavrynt.com</a>.</p></main>
 </body>
 </html>

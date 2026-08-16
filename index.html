@@ -9,12 +9,11 @@
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-<div class="topline">KAVRYNT MVP <span>MCP SERVERS -> REGISTRY -> GATEWAY -> KUBERNETES</span></div>
 <header>
 <nav class="nav shell">
 <a class="brand" href="index.html"><span class="logo-mark"><img src="assets/img/kavrynt-logo.png" alt=""></span><b>Kavrynt</b></a>
-<div class="links"><a href="index.html">Home</a><a href="quickstart.html">Quickstart</a><a href="docs.html">Docs</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a></div>
-<a class="github" href="https://github.com/kavrynt" target="_blank" rel="noreferrer">GitHub</a><button class="menu" aria-label="Open menu">&#9776;</button>
+<div class="links"><a href="index.html">Home</a><a href="https://docs.kavrynt.com/">Docs</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a></div>
+<button class="menu" aria-label="Open menu">&#9776;</button>
 </nav>
 </header>
 
@@ -24,12 +23,10 @@
 <div class="eyebrow">DEPLOY. SECURE. OPERATE.</div>
 <h1>MCP<br><em>control</em><br>plane.</h1>
 <p>Kavrynt helps platform teams register, operate, and route production MCP servers for AI agents on Kubernetes. Use it on EKS, AKS, GKE, OpenShift, self-managed clusters, or Kind for local testing.</p>
-<div class="actions"><a class="btn primary" href="quickstart.html">Install on Kubernetes</a><a class="btn" href="https://github.com/kavrynt" target="_blank" rel="noreferrer">Explore GitHub</a></div>
+<div class="actions"><a class="btn primary" href="https://docs.kavrynt.com/installation/">Install on Kubernetes</a><a class="btn" href="https://github.com/kavrynt" target="_blank" rel="noreferrer">Explore GitHub</a></div>
 <div class="meta">MCP &middot; KUBERNETES &middot; AI AGENTS &middot; CONTROL PLANE</div>
 </div>
 <div class="hero-art">
-<div class="halo"></div>
-<img class="brand-hero-logo" src="assets/img/kavrynt-logo.png" alt="Kavrynt">
 <div class="hero-card">
 <small>KAVRYNT ROUTING PLANE</small><span class="ready">&#9679; KIND TESTED</span>
 <div class="hero-flow"><b>kavryctl</b><i></i><b class="cyan">Registry</b><i></i><b class="violet">Gateway</b></div>
@@ -74,20 +71,11 @@
 
 <section class="dark-section"><div class="section shell">
 <div class="head center reveal"><div class="eyebrow">INSTALL ANYWHERE KUBERNETES RUNS</div><h2>Run Kavrynt on Kubernetes</h2><p>The public alpha path works on an existing Kubernetes cluster with kubectl and Helm. Kind is useful when you want a disposable local cluster on your laptop.</p></div>
-<div class="code-panel reveal"><pre><code>git clone https://github.com/kavrynt/kavrynt.git
-cd kavrynt
-go install ./cmd/kavryctl
-kubectl config current-context
-kubectl get nodes
+<div class="code-panel reveal"><pre><code>curl -fsSL https://raw.githubusercontent.com/kavrynt/kavrynt/main/scripts/install.sh | sh
+export PATH="$HOME/.kavrynt/bin:$PATH"
 
-# Local testing only
-# kind create cluster --name kavrynt-dev
-
-helm dependency build charts/kavrynt
-helm upgrade --install kavrynt charts/kavrynt \
-  --namespace kavrynt-system \
-  --create-namespace
-kubectl get pods -n kavrynt-system</code></pre></div>
+kavryctl install
+kavryctl status</code></pre></div>
 </div></section>
 
 <section class="section shell">
@@ -99,10 +87,10 @@ kubectl get pods -n kavrynt-system</code></pre></div>
 </div>
 </section>
 
-<section class="cta"><div class="shell center"><div class="eyebrow">BUILDING IN THE OPEN</div><h2>Bring control<br><em>to MCP operations.</em></h2><p>Kavrynt is ready for early MVP testing by developers who want to run MCP infrastructure on Kubernetes, from local Kind clusters to managed cloud clusters.</p><div class="actions center"><a class="btn primary" href="quickstart.html">Start quickstart</a><a class="btn" href="https://github.com/kavrynt/kavrynt" target="_blank" rel="noreferrer">View GitHub</a></div></div></section>
+<section class="cta"><div class="shell center"><div class="eyebrow">BUILDING IN THE OPEN</div><h2>Bring control<br><em>to MCP operations.</em></h2><p>Kavrynt is ready for early MVP testing by developers who want to run MCP infrastructure on Kubernetes, from local Kind clusters to managed cloud clusters.</p><div class="actions center"><a class="btn primary" href="https://docs.kavrynt.com/installation/">Read installation docs</a><a class="btn" href="https://github.com/kavrynt/kavrynt" target="_blank" rel="noreferrer">View GitHub</a></div></div></section>
 </main>
 
-<footer class="footer shell"><div class="brand"><span class="logo-mark"><img src="assets/img/kavrynt-logo.png" alt=""></span><b>Kavrynt</b><span>Deploy. Secure. Operate.</span></div><div class="footlinks"><a href="quickstart.html">Quickstart</a><a href="docs.html">Docs</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a><a href="https://github.com/kavrynt">GitHub</a></div><small>&copy; 2026 Kavrynt &middot; Infrastructure for MCP servers and AI agents.</small></footer>
+<footer class="site-footer"><div class="shell site-footer__grid"><section><h2>Kavrynt</h2><p>Kubernetes-native infrastructure for registering, discovering, and routing Model Context Protocol servers.</p></section><nav aria-label="Documentation"><h3>Documentation</h3><a href="https://docs.kavrynt.com/installation/">Installation</a><a href="https://docs.kavrynt.com/architecture/">Architecture</a><a href="https://docs.kavrynt.com/reference/kavryctl/">CLI reference</a></nav><nav aria-label="Project"><h3>Project</h3><a href="https://github.com/kavrynt/kavrynt">Source code</a><a href="https://github.com/kavrynt/kavrynt/issues">Report an issue</a><a href="https://docs.kavrynt.com/release-notes/">Release notes</a></nav></div><div class="shell site-footer__bottom">Copyright &copy; 2026 Kavrynt. All rights reserved.</div></footer>
 <script src="assets/js/main.js"></script>
 </body>
 </html>
