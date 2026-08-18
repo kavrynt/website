@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Install Kavrynt with Helm on any Kubernetes cluster, or use Kind for local MVP testing.">
-<title>Install with Helm - Kavrynt</title>
+<meta name="description" content="Run Kavrynt trial images on Kubernetes, or use Kind for local MVP testing.">
+<title>Trial Images on Kubernetes - Kavrynt</title>
 <link rel="icon" href="assets/img/kavrynt-logo.png">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -14,15 +14,15 @@
 <nav class="nav shell">
 <a class="brand" href="index.html"><span class="logo-mark"><img src="assets/img/kavrynt-logo.png" alt=""></span><b>Kavrynt</b></a>
 <div class="links"><a href="index.html">Home</a><a href="quickstart.html">Quickstart</a><a href="docs.html">Docs</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a></div>
-<a class="github" href="https://github.com/kavrynt" target="_blank" rel="noreferrer">GitHub</a><button class="menu" aria-label="Open menu">&#9776;</button>
+<button class="menu" aria-label="Open menu">&#9776;</button>
 </nav>
 </header>
 
 <main>
 <section class="inner shell reveal">
-<div class="eyebrow">INSTALL WITH HELM</div>
-<h1>Install Kavrynt<br><em>on Kubernetes.</em></h1>
-<p>Use the same flow for EKS, AKS, GKE, OpenShift, self-managed clusters, or Kind. Kind is only the disposable local test option.</p>
+<div class="eyebrow">TRIAL IMAGES</div>
+<h1>Run Kavrynt<br><em>on Kubernetes.</em></h1>
+<p>Use approved alpha or beta images on EKS, AKS, GKE, OpenShift, self-managed clusters, or Kind. Kind is only the disposable local test option.</p>
 </section>
 
 <section class="section shell docs">
@@ -31,7 +31,6 @@
 <h2>Before you begin</h2>
 <p>Confirm that your current Kubernetes context points at the cluster where Kavrynt should run. Docker and Kind are only needed for local testing.</p>
 <pre><code>kubectl version --client
-helm version
 kubectl config current-context
 kubectl get nodes
 
@@ -42,16 +41,10 @@ kind version</code></pre>
 
 <article>
 <b>02</b>
-<h2>Install kavryctl</h2>
-<p>After the first release, install the CLI as a laptop executable. During MVP development, use the source fallback from the monorepo.</p>
-<pre><code># Linux and macOS release path
-curl -fsSL https://kavrynt.com/install.sh | sh
-export PATH="$HOME/.kavrynt/bin:$PATH"
-kavryctl version</code></pre>
-<pre><code># Current MVP source fallback
-git clone https://github.com/kavrynt/kavrynt.git
-cd kavrynt
-go install ./cmd/kavryctl</code></pre>
+<h2>Set trial image inputs</h2>
+<p>Use the registry and tag provided with your Kavrynt trial access.</p>
+<pre><code>export KAVRYNT_IMAGE_REGISTRY=docker.io/kavrynt
+export KAVRYNT_TRIAL_TAG=0.1.0-beta</code></pre>
 </article>
 
 <article>
@@ -69,50 +62,76 @@ kubectl cluster-info --context kind-kavrynt-dev</code></pre>
 
 <article>
 <b>04</b>
-<h2>Install from source chart</h2>
-<p>The MVP chart lives in the public monorepo and installs Registry, Gateway, and Operator into <code>kavrynt-system</code>.</p>
-<pre><code>git clone https://github.com/kavrynt/kavrynt.git
-cd kavrynt
-helm dependency build charts/kavrynt
-helm upgrade --install kavrynt charts/kavrynt \
-  --namespace kavrynt-system \
-  --create-namespace</code></pre>
+<h2>Pull trial images</h2>
+<p>Developers pull only the trial images. Source access is not required.</p>
+<pre><code>docker pull "$KAVRYNT_IMAGE_REGISTRY/registry:$KAVRYNT_TRIAL_TAG"
+docker pull "$KAVRYNT_IMAGE_REGISTRY/gateway:$KAVRYNT_TRIAL_TAG"
+docker pull "$KAVRYNT_IMAGE_REGISTRY/k8s-operator:$KAVRYNT_TRIAL_TAG"</code></pre>
 </article>
 
 <article>
 <b>05</b>
+<h2>Deploy Registry and Gateway</h2>
+<p>Create the trial namespace and deploy the runtime images into the cluster.</p>
+<pre><code>kubectl create namespace kavrynt-system
+
+kubectl create deployment kavrynt-registry \
+  --namespace kavrynt-system \
+  --image "$KAVRYNT_IMAGE_REGISTRY/registry:$KAVRYNT_TRIAL_TAG" \
+  --port 8080
+
+kubectl set env deployment/kavrynt-registry \
+  --namespace kavrynt-system \
+  KAVRYNT_REGISTRY_DATA=/tmp/registry.json
+
+kubectl expose deployment kavrynt-registry \
+  --namespace kavrynt-system \
+  --port 8080 \
+  --target-port 8080
+
+kubectl create deployment kavrynt-gateway \
+  --namespace kavrynt-system \
+  --image "$KAVRYNT_IMAGE_REGISTRY/gateway:$KAVRYNT_TRIAL_TAG" \
+  --port 8080
+
+kubectl set env deployment/kavrynt-gateway \
+  --namespace kavrynt-system \
+  KAVRYNT_REGISTRY_URL=http://kavrynt-registry.kavrynt-system.svc.cluster.local:8080
+
+kubectl expose deployment kavrynt-gateway \
+  --namespace kavrynt-system \
+  --port 8080 \
+  --target-port 8080</code></pre>
+</article>
+
+<article>
+<b>06</b>
 <h2>Verify the install</h2>
-<p>Wait for the control-plane workloads and confirm that the CRD, pods, and services exist.</p>
+<p>Wait for the control-plane workloads and confirm that pods and services exist.</p>
 <pre><code>kubectl rollout status deployment/kavrynt-registry -n kavrynt-system --timeout=120s
 kubectl rollout status deployment/kavrynt-gateway -n kavrynt-system --timeout=120s
-kubectl rollout status deployment/kavrynt-operator -n kavrynt-system --timeout=120s
-kubectl get crd mcpservers.kavrynt.io
 kubectl get pods -n kavrynt-system
 kubectl get svc -n kavrynt-system</code></pre>
 </article>
 
 <article>
-<b>06</b>
+<b>07</b>
 <h2>Register a sample server</h2>
-<p>Deploy a temporary HTTP endpoint, then apply an <code>MCPServer</code> resource so the Operator syncs it into Registry.</p>
+<p>Deploy a temporary HTTP endpoint, then register it in Kavrynt Registry.</p>
 <pre><code>kubectl create deployment example-mcp-server \
   --image=hashicorp/http-echo:1.0 \
   -- -listen=:8080 -text='{"mock":true,"service":"example-mcp-server"}'
 kubectl expose deployment example-mcp-server --port=8080 --target-port=8080
-kubectl apply -f operator/config/samples/kavrynt_v1alpha1_mcpserver.yaml
-kubectl get mcpservers
-kubectl describe mcpserver example-mcp-server</code></pre>
-</article>
 
-<article>
-<b>07</b>
-<h2>Release chart path</h2>
-<p>After the first tagged release, install the packaged OCI Helm chart without cloning the repository.</p>
-<pre><code>curl -fsSL https://kavrynt.com/install.sh | sh
-helm upgrade --install kavrynt oci://ghcr.io/kavrynt/charts/kavrynt \
-  --version 0.1.0 \
-  --namespace kavrynt-system \
-  --create-namespace</code></pre>
+kubectl port-forward -n kavrynt-system svc/kavrynt-registry 18081:8080 &gt;/tmp/kavrynt-registry-pf.log 2&gt;&amp;1 &amp;
+registry_pf=$!
+sleep 3
+
+curl -fsS -X POST http://127.0.0.1:18081/v1/servers \
+  -H 'Content-Type: application/json' \
+  --data '{"apiVersion":"kavrynt.io/v1alpha1","kind":"MCPServer","metadata":{"name":"example-mcp-server"},"spec":{"version":"0.1.0","transport":"http","endpoint":"http://example-mcp-server.default.svc.cluster.local:8080"}}'
+
+kill "$registry_pf"</code></pre>
 </article>
 </section>
 
@@ -122,30 +141,30 @@ helm upgrade --install kavrynt oci://ghcr.io/kavrynt/charts/kavrynt \
 registry_pf=$!
 kubectl port-forward -n kavrynt-system svc/kavrynt-gateway 18080:8080 &gt;/tmp/kavrynt-gateway-pf.log 2&gt;&amp;1 &amp;
 gateway_pf=$!
-sleep 3
+sleep 12
 
 curl -fsS http://127.0.0.1:18081/v1/servers/example-mcp-server
 curl -fsS http://127.0.0.1:18080/v1/routes
-curl -fsS http://127.0.0.1:18080/mcp/example-mcp-server
+curl -fsS -X POST http://127.0.0.1:18080/mcp/example-mcp-server \
+  -H 'Content-Type: application/json' \
+  --data '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}'
 
 kill "$registry_pf" "$gateway_pf"</code></pre></div>
 <p class="note">Expected proxy response in the MVP demo: <code>{"mock":true,"service":"example-mcp-server"}</code></p>
 </section>
 
 <section class="section shell">
-<div class="head reveal"><div class="eyebrow">PUBLIC ALPHA IMAGES</div><h2>Container images<br><em>for Kubernetes installs.</em></h2></div>
-<div class="code-panel reveal"><pre><code>docker pull kavrynt/registry:dev
-docker pull kavrynt/gateway:dev
-docker pull kavrynt/k8s-operator:dev</code></pre></div>
-<p class="note">The <code>dev</code> tags are for early MVP testing. Versioned tags should be used after the first release.</p>
+<div class="head reveal"><div class="eyebrow">TRIAL IMAGE POLICY</div><h2>Container images<br><em>for evaluation.</em></h2></div>
+<div class="code-panel reveal"><pre><code>$KAVRYNT_IMAGE_REGISTRY/registry:$KAVRYNT_TRIAL_TAG
+$KAVRYNT_IMAGE_REGISTRY/gateway:$KAVRYNT_TRIAL_TAG
+$KAVRYNT_IMAGE_REGISTRY/k8s-operator:$KAVRYNT_TRIAL_TAG</code></pre></div>
+<p class="note">Trial images are for approved developer evaluation. Kavrynt source remains private and commercial.</p>
 </section>
 
 <section class="section shell">
 <div class="head reveal"><div class="eyebrow">CLEANUP</div><h2>Remove Kavrynt<br><em>when finished.</em></h2></div>
-<div class="code-panel reveal"><pre><code>kubectl delete -f operator/config/samples/kavrynt_v1alpha1_mcpserver.yaml
-kubectl delete service example-mcp-server
+<div class="code-panel reveal"><pre><code>kubectl delete service example-mcp-server
 kubectl delete deployment example-mcp-server
-helm uninstall kavrynt -n kavrynt-system
 kubectl delete namespace kavrynt-system
 kind delete cluster --name kavrynt-dev</code></pre></div>
 <p class="note">Only delete the Kind cluster if you created it for local testing. Do not delete a shared cloud cluster.</p>

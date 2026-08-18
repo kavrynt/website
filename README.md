@@ -1,36 +1,26 @@
-# Kavrynt GitHub Pages Site
+# Kavrynt Website
 
-Static GitHub Pages site. No Helm, backend or Node runtime required.
+Static marketing site. No Helm, backend or Node runtime required.
 
 ## Pages
 - `index.html` - main landing page for Kavrynt MCP infrastructure
 - `quickstart.html` - developer Kubernetes install path, with Kind for local testing
 - `docs.html` - architecture and MVP documentation
 - `vision.html` - product vision
-- `roadmap.html` - public alpha roadmap
+- `roadmap.html` - commercial trial roadmap
 
-## Install script
+## Trial image positioning
 
-`install.sh` is designed for `kavryctl` GitHub release assets from the public
-`kavrynt/kavrynt` monorepo:
+The public website points developers to approved alpha or beta trial images
+instead of source code access:
 
 ```bash
-curl -fsSL https://kavrynt.com/install.sh | sh
+export KAVRYNT_IMAGE_REGISTRY=docker.io/kavrynt
+export KAVRYNT_TRIAL_TAG=0.1.0-beta
 ```
-
-Expected release asset names:
-
-- `kavryctl_darwin_arm64.tar.gz`
-- `kavryctl_darwin_amd64.tar.gz`
-- `kavryctl_linux_arm64.tar.gz`
-- `kavryctl_linux_amd64.tar.gz`
-
-Each archive should contain an executable named `kavryctl`.
 
 ## MVP visual
 
 kavryctl -> Kubernetes -> MCPServer -> Operator -> Registry -> Gateway -> MCP traffic
 
 The pipeline animation is pure CSS/JavaScript and loops continuously.
-
-GitHub Pages serves this repository directly from the configured branch.

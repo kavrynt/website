@@ -14,7 +14,7 @@
 <nav class="nav shell">
 <a class="brand" href="index.html"><span class="logo-mark"><img src="assets/img/kavrynt-logo.png" alt=""></span><b>Kavrynt</b></a>
 <div class="links"><a href="index.html">Home</a><a href="quickstart.html">Quickstart</a><a href="docs.html">Docs</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a></div>
-<a class="github" href="https://github.com/kavrynt" target="_blank" rel="noreferrer">GitHub</a><button class="menu" aria-label="Open menu">&#9776;</button>
+<button class="menu" aria-label="Open menu">&#9776;</button>
 </nav>
 </header>
 
@@ -53,21 +53,21 @@ kavryctl / Operator
 </article>
 <article>
 <b>04</b>
-<h2>Repositories</h2>
-<p>The public alpha exposes the monorepo source, docs, issues, release automation, checksums, and contribution guidance.</p>
-<a class="btn primary" href="https://github.com/kavrynt/kavrynt" target="_blank" rel="noreferrer">Open GitHub</a>
+<h2>Trial access</h2>
+<p>Kavrynt source is private. Developer evaluation uses approved alpha or beta images that can be pulled directly into Kubernetes clusters.</p>
+<a class="btn primary" href="quickstart.html">Run trial images</a>
 </article>
 <article>
 <b>05</b>
 <h2>License</h2>
-<p>Kavrynt is source-available under Elastic License 2.0. The license allows use and modification but restricts offering Kavrynt as a competing hosted or managed service.</p>
+<p>Kavrynt is a private commercial SaaS product. Trial images are for approved evaluation and are not an open-source distribution.</p>
 </article>
 <article>
 <b>06</b>
-<h2>Docker images</h2>
-<pre><code>kavrynt/registry:dev
-kavrynt/gateway:dev
-kavrynt/k8s-operator:dev</code></pre>
+<h2>Trial images</h2>
+<pre><code>$KAVRYNT_IMAGE_REGISTRY/registry:$KAVRYNT_TRIAL_TAG
+$KAVRYNT_IMAGE_REGISTRY/gateway:$KAVRYNT_TRIAL_TAG
+$KAVRYNT_IMAGE_REGISTRY/k8s-operator:$KAVRYNT_TRIAL_TAG</code></pre>
 </article>
 </section>
 
