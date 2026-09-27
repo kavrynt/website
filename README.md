@@ -7,6 +7,7 @@ Static marketing site. No Helm, backend or Node runtime required.
 - `docs.html` - compatibility redirect to https://docs.kavrynt.com/
 - `vision.html` - product vision
 - `roadmap.html` - commercial trial roadmap
+- `contact.html` - contact information and inquiries
 
 Product documentation, installation guidance, architecture, and CLI reference
 are maintained at https://docs.kavrynt.com/.

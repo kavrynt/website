@@ -66,7 +66,8 @@ header {
 .stage,
 .code-panel pre,
 .timeline article,
-.three article {
+.three article,
+.docs article {
   background: var(--site-panel);
 }
 
@@ -74,7 +75,8 @@ header {
 .pipeline-box,
 .architecture,
 .timeline article,
-.three article {
+.three article,
+.docs article {
   border-color: var(--site-border);
 }
 
@@ -98,8 +100,8 @@ header {
 
 .site-footer__grid {
   display: grid;
-  grid-template-columns: minmax(260px, 1.4fr) repeat(2, minmax(170px, 1fr));
-  gap: 3rem;
+  grid-template-columns: minmax(240px, 1.4fr) repeat(3, minmax(150px, 1fr));
+  gap: 2.5rem;
   align-items: start;
   padding: 3rem 0 2.5rem;
 }
@@ -150,6 +152,26 @@ header {
   color: var(--site-orange);
 }
 
+.site-footer address {
+  font-style: normal;
+  color: #aeb4c0;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.site-footer section a {
+  display: inline-block;
+  color: #bec3ce;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  margin-bottom: 0.4rem;
+}
+
+.site-footer section a:hover {
+  color: var(--site-orange);
+}
+
 .site-footer__bottom {
   padding: 1.15rem 0 1.4rem;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
@@ -157,10 +179,31 @@ header {
   font-size: 0.65rem;
 }
 
+.contact-highlight {
+  margin-top: 1.5rem;
+}
+
+.contact-address {
+  margin-top: 1.5rem;
+  color: #fff;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.contact-address span {
+  color: var(--site-muted);
+  font-size: 0.88rem;
+}
+
 @media (max-width: 950px) {
   .nav.open .links {
     top: 64px;
     background: var(--site-main);
+  }
+
+  .site-footer__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
   }
 }
 
