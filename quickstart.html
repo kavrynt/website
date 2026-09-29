@@ -44,7 +44,7 @@ kind version</code></pre>
 <h2>Set trial image inputs</h2>
 <p>Use the registry and tag provided with your Kavrynt trial access.</p>
 <pre><code>export KAVRYNT_IMAGE_REGISTRY=docker.io/kavrynt
-export KAVRYNT_TRIAL_TAG=0.1.0-beta</code></pre>
+export KAVRYNT_TRIAL_TAG=0.0.1-beta.1</code></pre>
 </article>
 
 <article>
@@ -66,7 +66,7 @@ kubectl cluster-info --context kind-kavrynt-dev</code></pre>
 <p>Developers pull only the trial images. Source access is not required.</p>
 <pre><code>docker pull "$KAVRYNT_IMAGE_REGISTRY/registry:$KAVRYNT_TRIAL_TAG"
 docker pull "$KAVRYNT_IMAGE_REGISTRY/gateway:$KAVRYNT_TRIAL_TAG"
-docker pull "$KAVRYNT_IMAGE_REGISTRY/k8s-operator:$KAVRYNT_TRIAL_TAG"</code></pre>
+docker pull "$KAVRYNT_IMAGE_REGISTRY/operator:$KAVRYNT_TRIAL_TAG"</code></pre>
 </article>
 
 <article>
@@ -157,7 +157,7 @@ kill "$registry_pf" "$gateway_pf"</code></pre></div>
 <div class="head reveal"><div class="eyebrow">TRIAL IMAGE POLICY</div><h2>Container images<br><em>for evaluation.</em></h2></div>
 <div class="code-panel reveal"><pre><code>$KAVRYNT_IMAGE_REGISTRY/registry:$KAVRYNT_TRIAL_TAG
 $KAVRYNT_IMAGE_REGISTRY/gateway:$KAVRYNT_TRIAL_TAG
-$KAVRYNT_IMAGE_REGISTRY/k8s-operator:$KAVRYNT_TRIAL_TAG</code></pre></div>
+$KAVRYNT_IMAGE_REGISTRY/operator:$KAVRYNT_TRIAL_TAG</code></pre></div>
 <p class="note">Trial images are for approved developer evaluation. Kavrynt source remains private and commercial.</p>
 </section>
 

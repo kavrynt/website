@@ -73,7 +73,7 @@
 <section class="dark-section"><div class="section shell">
 <div class="head center reveal"><div class="eyebrow">TRIAL IMAGES FOR KUBERNETES</div><h2>Run Kavrynt on Kubernetes</h2><p>Developers evaluate Kavrynt by pulling approved trial images into their own cluster. Kind is useful when you want a disposable local cluster on your laptop.</p></div>
 <div class="code-panel reveal"><pre><code>export KAVRYNT_IMAGE_REGISTRY=docker.io/kavrynt
-export KAVRYNT_TRIAL_TAG=0.1.0-beta
+export KAVRYNT_TRIAL_TAG=0.0.1-beta.1
 
 kubectl config current-context
 kubectl get nodes
@@ -83,7 +83,7 @@ kubectl get nodes
 
 docker pull "$KAVRYNT_IMAGE_REGISTRY/registry:$KAVRYNT_TRIAL_TAG"
 docker pull "$KAVRYNT_IMAGE_REGISTRY/gateway:$KAVRYNT_TRIAL_TAG"
-docker pull "$KAVRYNT_IMAGE_REGISTRY/k8s-operator:$KAVRYNT_TRIAL_TAG"
+docker pull "$KAVRYNT_IMAGE_REGISTRY/operator:$KAVRYNT_TRIAL_TAG"
 
 kubectl create namespace kavrynt-system
 kubectl get pods -n kavrynt-system</code></pre></div>
