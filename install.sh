@@ -2,15 +2,13 @@
 set -eu
 
 cat >&2 <<'EOF'
-Kavrynt CLI public install is not available for the commercial trial.
+Kavrynt installs with Helm; there is no script installer.
 
-Use the approved trial images and the Kubernetes/Kind runbook instead:
+  helm upgrade --install kavrynt oci://registry-1.docker.io/kavrynt/kavrynt \
+    --version 0.0.2-beta.1 \
+    --namespace kavrynt-system --create-namespace --wait
 
-  export KAVRYNT_IMAGE_REGISTRY=docker.io/kavrynt
-  export KAVRYNT_TRIAL_TAG=0.0.1-beta.1
-  docker pull "$KAVRYNT_IMAGE_REGISTRY/registry:$KAVRYNT_TRIAL_TAG"
-  docker pull "$KAVRYNT_IMAGE_REGISTRY/gateway:$KAVRYNT_TRIAL_TAG"
-  docker pull "$KAVRYNT_IMAGE_REGISTRY/operator:$KAVRYNT_TRIAL_TAG"
+Full guide: https://docs.kavrynt.com/quickstart/
 EOF
 
 exit 1

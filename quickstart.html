@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Run Kavrynt trial images on Kubernetes, or use Kind for local MVP testing.">
-<title>Trial Images on Kubernetes - Kavrynt</title>
+<meta name="description" content="Install the Kavrynt 0.0.2-beta.1 Helm chart on any Kubernetes cluster, or on Kind for local testing.">
+<title>Quickstart - Kavrynt</title>
 <link rel="icon" href="assets/img/kavrynt-logo.png">
 <link rel="stylesheet" href="assets/css/style.css">
 <link rel="stylesheet" href="assets/css/docs-theme.css">
@@ -20,158 +20,69 @@
 
 <main>
 <section class="inner shell reveal">
-<div class="eyebrow">TRIAL IMAGES</div>
+<div class="eyebrow">QUICKSTART &middot; 0.0.2-BETA.1</div>
 <h1>Run Kavrynt<br><em>on Kubernetes.</em></h1>
-<p>Use approved alpha or beta images on EKS, AKS, GKE, OpenShift, self-managed clusters, or Kind. Kind is only the disposable local test option.</p>
+<p>Install the signed beta chart on EKS, AKS, GKE, OpenShift, self-managed clusters, or Kind. No source access is needed.</p>
 </section>
 
 <section class="section shell docs">
 <article>
 <b>01</b>
 <h2>Before you begin</h2>
-<p>Confirm that your current Kubernetes context points at the cluster where Kavrynt should run. Docker and Kind are only needed for local testing.</p>
-<pre><code>kubectl version --client
-kubectl config current-context
-kubectl get nodes
+<p>You need Kubernetes 1.29+, <code>kubectl</code>, and Helm 3.8+. Docker and Kind are only needed for a local test cluster.</p>
+<pre><code>kubectl config current-context
+helm version --short
 
 # Local testing only
-docker version
-kind version</code></pre>
+kind create cluster --name kavrynt-trial</code></pre>
 </article>
 
 <article>
 <b>02</b>
-<h2>Set trial image inputs</h2>
-<p>Use the registry and tag provided with your Kavrynt trial access.</p>
-<pre><code>export KAVRYNT_IMAGE_REGISTRY=docker.io/kavrynt
-export KAVRYNT_TRIAL_TAG=0.0.1-beta.1</code></pre>
+<h2>Install Kavrynt</h2>
+<p>One chart installs the MCPServer CRD, the Operator, and the Gateway from signed, multi-architecture images.</p>
+<pre><code>helm upgrade --install kavrynt oci://registry-1.docker.io/kavrynt/kavrynt \
+  --version 0.0.2-beta.1 \
+  --namespace kavrynt-system --create-namespace --wait
+
+kubectl get deployments -n kavrynt-system</code></pre>
 </article>
 
 <article>
 <b>03</b>
-<h2>Use a cluster</h2>
-<p>Use your existing cloud or self-managed Kubernetes cluster. Create Kind only when you want a local cluster you can delete after testing.</p>
-<pre><code># Existing cluster
-kubectl config current-context
-kubectl get nodes
+<h2>Declare an MCP server</h2>
+<p>Point an MCPServer at any MCP server reachable over HTTP in your cluster.</p>
+<pre><code>kubectl apply -f - &lt;&lt;'EOF'
+apiVersion: kavrynt.io/v1alpha1
+kind: MCPServer
+metadata:
+  name: example-mcp-server
+  namespace: default
+spec:
+  version: 0.1.0
+  transport: http
+  endpoint: http://example-mcp-server.default.svc.cluster.local:8080
+EOF
 
-# Local test cluster
-kind create cluster --name kavrynt-dev
-kubectl cluster-info --context kind-kavrynt-dev</code></pre>
+kubectl get mcpservers</code></pre>
 </article>
 
 <article>
 <b>04</b>
-<h2>Pull trial images</h2>
-<p>Developers pull only the trial images. Source access is not required.</p>
-<pre><code>docker pull "$KAVRYNT_IMAGE_REGISTRY/registry:$KAVRYNT_TRIAL_TAG"
-docker pull "$KAVRYNT_IMAGE_REGISTRY/gateway:$KAVRYNT_TRIAL_TAG"
-docker pull "$KAVRYNT_IMAGE_REGISTRY/operator:$KAVRYNT_TRIAL_TAG"</code></pre>
-</article>
-
-<article>
-<b>05</b>
-<h2>Deploy Registry and Gateway</h2>
-<p>Create the trial namespace and deploy the runtime images into the cluster.</p>
-<pre><code>kubectl create namespace kavrynt-system
-
-kubectl create deployment kavrynt-registry \
-  --namespace kavrynt-system \
-  --image "$KAVRYNT_IMAGE_REGISTRY/registry:$KAVRYNT_TRIAL_TAG" \
-  --port 8080
-
-kubectl set env deployment/kavrynt-registry \
-  --namespace kavrynt-system \
-  KAVRYNT_REGISTRY_DATA=/tmp/registry.json
-
-kubectl expose deployment kavrynt-registry \
-  --namespace kavrynt-system \
-  --port 8080 \
-  --target-port 8080
-
-kubectl create deployment kavrynt-gateway \
-  --namespace kavrynt-system \
-  --image "$KAVRYNT_IMAGE_REGISTRY/gateway:$KAVRYNT_TRIAL_TAG" \
-  --port 8080
-
-kubectl set env deployment/kavrynt-gateway \
-  --namespace kavrynt-system \
-  KAVRYNT_REGISTRY_URL=http://kavrynt-registry.kavrynt-system.svc.cluster.local:8080
-
-kubectl expose deployment kavrynt-gateway \
-  --namespace kavrynt-system \
-  --port 8080 \
-  --target-port 8080</code></pre>
-</article>
-
-<article>
-<b>06</b>
-<h2>Verify the install</h2>
-<p>Wait for the control-plane workloads and confirm that pods and services exist.</p>
-<pre><code>kubectl rollout status deployment/kavrynt-registry -n kavrynt-system --timeout=120s
-kubectl rollout status deployment/kavrynt-gateway -n kavrynt-system --timeout=120s
-kubectl get pods -n kavrynt-system
-kubectl get svc -n kavrynt-system</code></pre>
-</article>
-
-<article>
-<b>07</b>
-<h2>Register a sample server</h2>
-<p>Deploy a temporary HTTP endpoint, then register it in Kavrynt Registry.</p>
-<pre><code>kubectl create deployment example-mcp-server \
-  --image=hashicorp/http-echo:1.0 \
-  -- -listen=:8080 -text='{"mock":true,"service":"example-mcp-server"}'
-kubectl expose deployment example-mcp-server --port=8080 --target-port=8080
-
-kubectl port-forward -n kavrynt-system svc/kavrynt-registry 18081:8080 &gt;/tmp/kavrynt-registry-pf.log 2&gt;&amp;1 &amp;
-registry_pf=$!
-sleep 3
-
-curl -fsS -X POST http://127.0.0.1:18081/v1/servers \
-  -H 'Content-Type: application/json' \
-  --data '{"apiVersion":"kavrynt.io/v1alpha1","kind":"MCPServer","metadata":{"name":"example-mcp-server"},"spec":{"version":"0.1.0","transport":"http","endpoint":"http://example-mcp-server.default.svc.cluster.local:8080"}}'
-
-kill "$registry_pf"</code></pre>
+<h2>Route through the Gateway</h2>
+<p>Each Ready server is routed at <code>/mcp/&lt;namespace&gt;.&lt;name&gt;</code>. Caller credentials are never forwarded to MCP servers.</p>
+<pre><code>kubectl port-forward -n kavrynt-system svc/kavrynt-gateway 18080:8080 &amp;
+curl -fsS http://127.0.0.1:18080/v1/routes</code></pre>
 </article>
 </section>
 
 <section class="section shell">
-<div class="head reveal"><div class="eyebrow">EXPECTED RESULT</div><h2>A working MCP route<br><em>through Gateway.</em></h2></div>
-<div class="code-panel reveal"><pre><code>kubectl port-forward -n kavrynt-system svc/kavrynt-registry 18081:8080 &gt;/tmp/kavrynt-registry-pf.log 2&gt;&amp;1 &amp;
-registry_pf=$!
-kubectl port-forward -n kavrynt-system svc/kavrynt-gateway 18080:8080 &gt;/tmp/kavrynt-gateway-pf.log 2&gt;&amp;1 &amp;
-gateway_pf=$!
-sleep 12
-
-curl -fsS http://127.0.0.1:18081/v1/servers/example-mcp-server
-curl -fsS http://127.0.0.1:18080/v1/routes
-curl -fsS -X POST http://127.0.0.1:18080/mcp/example-mcp-server \
-  -H 'Content-Type: application/json' \
-  --data '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}'
-
-kill "$registry_pf" "$gateway_pf"</code></pre></div>
-<p class="note">Expected proxy response in the MVP demo: <code>{"mock":true,"service":"example-mcp-server"}</code></p>
-</section>
-
-<section class="section shell">
-<div class="head reveal"><div class="eyebrow">TRIAL IMAGE POLICY</div><h2>Container images<br><em>for evaluation.</em></h2></div>
-<div class="code-panel reveal"><pre><code>$KAVRYNT_IMAGE_REGISTRY/registry:$KAVRYNT_TRIAL_TAG
-$KAVRYNT_IMAGE_REGISTRY/gateway:$KAVRYNT_TRIAL_TAG
-$KAVRYNT_IMAGE_REGISTRY/operator:$KAVRYNT_TRIAL_TAG</code></pre></div>
-<p class="note">Trial images are for approved developer evaluation. Kavrynt source remains private and commercial.</p>
-</section>
-
-<section class="section shell">
-<div class="head reveal"><div class="eyebrow">CLEANUP</div><h2>Remove Kavrynt<br><em>when finished.</em></h2></div>
-<div class="code-panel reveal"><pre><code>kubectl delete service example-mcp-server
-kubectl delete deployment example-mcp-server
-kubectl delete namespace kavrynt-system
-kind delete cluster --name kavrynt-dev</code></pre></div>
-<p class="note">Only delete the Kind cluster if you created it for local testing. Do not delete a shared cloud cluster.</p>
+<div class="head reveal"><div class="eyebrow">FULL GUIDE</div><h2>Step-by-step runbook<br><em>with expected output.</em></h2></div>
+<p class="note">The <a href="https://docs.kavrynt.com/quickstart/">documentation quickstart</a> includes a test backend, expected results, cleanup, and troubleshooting. The beta is for evaluation in trusted clusters: the Gateway does not authenticate clients or enforce policy yet.</p>
 </section>
 </main>
 
-<footer class="site-footer"><div class="shell site-footer__grid"><section><h2>Kavrynt</h2><p>Kubernetes-native infrastructure for registering, discovering, and routing Model Context Protocol servers.</p></section><nav aria-label="Documentation"><h3>Documentation</h3><a href="https://docs.kavrynt.com/installation/">Installation</a><a href="https://docs.kavrynt.com/architecture/">Architecture</a><a href="https://docs.kavrynt.com/release-notes/">Release notes</a></nav><nav aria-label="Product"><h3>Product</h3><a href="quickstart.html">Trial images</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a><a href="contact.html">Contact</a></nav><section class="site-footer__contact" aria-label="Contact"><h3>Contact</h3><a href="mailto:contact@kavrynt.com">contact@kavrynt.com</a><address>Indirapuram, Ghaziabad<br>UP, India</address></section></div><div class="shell site-footer__bottom">Copyright &copy; 2026 Kavrynt. All rights reserved.</div></footer>
+<footer class="site-footer"><div class="shell site-footer__grid"><section><h2>Kavrynt</h2><p>Kubernetes-native infrastructure for registering, discovering, and routing Model Context Protocol servers.</p></section><nav aria-label="Documentation"><h3>Documentation</h3><a href="https://docs.kavrynt.com/installation/">Installation</a><a href="https://docs.kavrynt.com/architecture/">Architecture</a><a href="https://docs.kavrynt.com/release-notes/">Release notes</a></nav><nav aria-label="Product"><h3>Product</h3><a href="quickstart.html">Quickstart</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a><a href="contact.html">Contact</a></nav><section class="site-footer__contact" aria-label="Contact"><h3>Contact</h3><a href="mailto:contact@kavrynt.com">contact@kavrynt.com</a><address>Indirapuram, Ghaziabad<br>UP, India</address></section></div><div class="shell site-footer__bottom">Copyright &copy; 2026 Kavrynt. All rights reserved.</div></footer>
 <script src="assets/js/main.js"></script>
 </body>
 </html>
