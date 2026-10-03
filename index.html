@@ -23,15 +23,15 @@
 <div>
 <div class="eyebrow">DEPLOY. SECURE. OPERATE.</div>
 <h1>MCP<br><em>control</em><br>plane.</h1>
-<p>Kavrynt helps platform teams register, operate, and route production MCP servers for AI agents on Kubernetes. Kavrynt is a private commercial SaaS product with approved alpha and beta trial images for developer evaluation.</p>
+<p>Kavrynt helps platform teams register, operate, and route MCP servers for AI agents on Kubernetes. The Kavrynt Runtime installs in your cluster today as a signed beta; Kavrynt Cloud, the hosted control plane, is in development.</p>
 <div class="actions"><a class="btn primary" href="quickstart.html">Run trial images</a><a class="btn" href="https://docs.kavrynt.com/">Read docs</a></div>
 <div class="meta">MCP &middot; KUBERNETES &middot; AI AGENTS &middot; CONTROL PLANE</div>
 </div>
 <div class="hero-art">
 <div class="hero-card">
 <small>KAVRYNT CONTROL PLANE</small>
-<div class="hero-flow"><b>kavryctl</b><i></i><b class="cyan">Registry</b><i></i><b class="violet">Gateway</b></div>
-<footer>Register MCP servers -> sync routes -> proxy agent traffic</footer>
+<div class="hero-flow"><b>MCPServer</b><i></i><b class="cyan">Operator</b><i></i><b class="violet">Gateway</b></div>
+<footer>Declare MCP servers -> validate -> route agent traffic</footer>
 </div>
 </div>
 </section>
@@ -39,69 +39,62 @@
 <section class="statement"><div class="shell"><small>THE PROBLEM</small><h2>AI agents need MCP servers.<br><em>Teams need control.</em></h2></div></section>
 
 <section class="section shell" id="mvp">
-<div class="head reveal"><div class="eyebrow">THE KAVRYNT MVP</div><h2>One Kubernetes path from manifest<br><em>to routed MCP traffic.</em></h2><p>Developers can define an MCP server, sync it into Registry, and route traffic through Gateway on any Kubernetes cluster. Kind is only the local test option.</p></div>
+<div class="head reveal"><div class="eyebrow">THE KAVRYNT MVP</div><h2>One Kubernetes path from manifest<br><em>to routed MCP traffic.</em></h2><p>Teams declare an MCP server as a Kubernetes resource, the Operator validates it, and the Gateway routes agent traffic to it on any Kubernetes cluster. Kind is only the local test option.</p></div>
 <div class="pipeline-box reveal">
 <div class="pipeline-head"><span>&#9679; KUBERNETES CONTROL-PLANE PATH</span><b id="runStatus">RUNNING</b></div>
 <div class="pipeline">
-<div class="stage" data-stage="1"><small>01 &middot; CLIENT</small><strong>kavryctl</strong><label>Developer CLI</label><em>INSTALLED</em></div>
+<div class="stage" data-stage="1"><small>01 &middot; INSTALL</small><strong>Helm chart</strong><label>Signed images</label><em>INSTALLED</em></div>
 <div class="connector"><i></i></div>
 <div class="stage" data-stage="2"><small>02 &middot; INTENT</small><strong>MCPServer</strong><label>Kubernetes CR</label><em>APPLIED</em></div>
 <div class="connector"><i></i></div>
-<div class="stage" data-stage="3"><small>03 &middot; CONTROL</small><strong>Operator</strong><label>Reconcile loop</label><em>SYNCED</em></div>
+<div class="stage" data-stage="3"><small>03 &middot; CONTROL</small><strong>Operator</strong><label>Reconcile loop</label><em>VALIDATED</em></div>
 <div class="connector"><i></i></div>
-<div class="stage" data-stage="4"><small>04 &middot; SOURCE</small><strong>Registry</strong><label>Server record</label><em>READY</em></div>
+<div class="stage" data-stage="4"><small>04 &middot; STATUS</small><strong>Ready</strong><label>Kubernetes API</label><em>READY</em></div>
 <div class="connector"><i></i></div>
-<div class="stage" data-stage="5"><small>05 &middot; DATA PLANE</small><strong>Gateway</strong><label>Route table</label><em>LOADED</em></div>
+<div class="stage" data-stage="5"><small>05 &middot; DATA PLANE</small><strong>Gateway</strong><label>Watched routes</label><em>LOADED</em></div>
 <div class="connector"><i></i></div>
 <div class="stage" data-stage="6"><small>06 &middot; AGENT</small><strong>MCP Traffic</strong><label>HTTP proxy</label><em>ROUTED</em></div>
 </div>
-<div class="control"><b>&#9670; Kavrynt</b><span>Registry API</span><span>Gateway routing</span><span>Kubernetes CRD</span><span>Helm install</span><span>Cloud or local</span></div>
-<div class="caption">One CLI. &middot; One Registry. &middot; One Gateway. &middot; One Kubernetes-native control loop.</div>
+<div class="control"><b>&#9670; Kavrynt</b><span>MCPServer API</span><span>Gateway routing</span><span>Kubernetes CRD</span><span>Helm install</span><span>Kubernetes 1.29+</span></div>
+<div class="caption">One resource. &middot; One Gateway. &middot; One Kubernetes-native control loop.</div>
 </div>
 </section>
 
 <section class="section shell">
 <div class="head reveal"><div class="eyebrow">COMPONENTS</div><h2>Small pieces with<br><em>clear responsibilities.</em></h2></div>
 <div class="cards">
-<article><b>01</b><h3>kavryctl</h3><p>CLI for registering, inspecting, and testing MCP server definitions.</p></article>
-<article><b>02</b><h3>Registry</h3><p>Source of truth for MCP server metadata and routeable endpoints.</p></article>
-<article><b>03</b><h3>Gateway</h3><p>Data-plane entry point that routes AI client traffic to MCP servers.</p></article>
-<article><b>04</b><h3>Operator</h3><p>Kubernetes controller that syncs MCPServer resources into Registry.</p></article>
+<article><b>01</b><h3>MCPServer</h3><p>Kubernetes resource that declares an MCP server, validated at admission.</p></article>
+<article><b>02</b><h3>kavryctl</h3><p>CLI for validating, registering, and inspecting MCP servers through your kubeconfig.</p></article>
+<article><b>03</b><h3>Gateway</h3><p>Data-plane entry point that routes AI client traffic to MCP servers and never forwards caller credentials.</p></article>
+<article><b>04</b><h3>Operator</h3><p>Kubernetes controller that validates MCPServer resources and reports readiness.</p></article>
 </div>
 </section>
 
 <section class="dark-section"><div class="section shell">
-<div class="head center reveal"><div class="eyebrow">TRIAL IMAGES FOR KUBERNETES</div><h2>Run Kavrynt on Kubernetes</h2><p>Developers evaluate Kavrynt by pulling approved trial images into their own cluster. Kind is useful when you want a disposable local cluster on your laptop.</p></div>
-<div class="code-panel reveal"><pre><code>export KAVRYNT_IMAGE_REGISTRY=docker.io/kavrynt
-export KAVRYNT_TRIAL_TAG=0.0.1-beta.1
+<div class="head center reveal"><div class="eyebrow">TRIAL IMAGES FOR KUBERNETES</div><h2>Run Kavrynt on Kubernetes</h2><p>Install the signed beta chart into your own cluster. Kind is useful when you want a disposable local cluster on your laptop.</p></div>
+<div class="code-panel reveal"><pre><code># Local testing only
+# kind create cluster --name kavrynt-trial
 
-kubectl config current-context
-kubectl get nodes
+helm upgrade --install kavrynt oci://registry-1.docker.io/kavrynt/kavrynt \
+  --version 0.0.2-beta.1 \
+  --namespace kavrynt-system --create-namespace --wait
 
-# Local testing only
-# kind create cluster --name kavrynt-dev
-
-docker pull "$KAVRYNT_IMAGE_REGISTRY/registry:$KAVRYNT_TRIAL_TAG"
-docker pull "$KAVRYNT_IMAGE_REGISTRY/gateway:$KAVRYNT_TRIAL_TAG"
-docker pull "$KAVRYNT_IMAGE_REGISTRY/operator:$KAVRYNT_TRIAL_TAG"
-
-kubectl create namespace kavrynt-system
-kubectl get pods -n kavrynt-system</code></pre></div>
+kubectl get deployments -n kavrynt-system</code></pre></div>
 </div></section>
 
 <section class="section shell">
-<div class="head reveal"><div class="eyebrow">ARCHITECTURE</div><h2>Built for Kubernetes first,<br><em>then production hardening.</em></h2></div>
+<div class="head reveal"><div class="eyebrow">ARCHITECTURE</div><h2>Runtime in your cluster,<br><em>control plane in the cloud.</em></h2><p>MCP traffic never leaves your cluster. Kavrynt Cloud will receive inventory and usage metadata, not tool payloads.</p></div>
 <div class="architecture reveal">
-<div><b>01</b><h3>Developer</h3><p>Installs kavryctl and declares MCP server intent.</p><span>CLI</span></div>
-<div class="active"><b>02</b><h3>Control Plane</h3><p>Registry and Operator keep server metadata in sync.</p><span>Kavrynt</span></div>
-<div><b>03</b><h3>Data Plane</h3><p>Gateway exposes stable MCP routing for AI clients.</p><span>MCP</span></div>
+<div><b>01</b><h3>Declare</h3><p>Teams declare MCP servers as MCPServer resources with kubectl, GitOps, or kavryctl. The Operator validates them and reports readiness.</p><span>Available &middot; beta</span></div>
+<div class="active"><b>02</b><h3>Route</h3><p>The Gateway in your cluster routes AI client traffic to ready MCP servers from a read-only Kubernetes watch.</p><span>Available &middot; beta</span></div>
+<div><b>03</b><h3>Govern</h3><p>Kavrynt Cloud adds sign-in, cross-cluster inventory, MCP traffic visibility, and audit across clusters.</p><span>In development</span></div>
 </div>
 </section>
 
 <section class="cta"><div class="shell center"><div class="eyebrow">COMMERCIAL TRIAL</div><h2>Bring control<br><em>to MCP operations.</em></h2><p>Kavrynt is ready for early MVP testing by developers who want to run MCP infrastructure on Kubernetes, from local Kind clusters to managed cloud clusters.</p><div class="actions center"><a class="btn primary" href="quickstart.html">Start quickstart</a><a class="btn" href="https://docs.kavrynt.com/">Review product docs</a></div></div></section>
 </main>
 
-<footer class="site-footer"><div class="shell site-footer__grid"><section><h2>Kavrynt</h2><p>Kubernetes-native infrastructure for registering, discovering, and routing Model Context Protocol servers.</p></section><nav aria-label="Documentation"><h3>Documentation</h3><a href="https://docs.kavrynt.com/installation/">Installation</a><a href="https://docs.kavrynt.com/architecture/">Architecture</a><a href="https://docs.kavrynt.com/release-notes/">Release notes</a></nav><nav aria-label="Product"><h3>Product</h3><a href="quickstart.html">Trial images</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a><a href="contact.html">Contact</a></nav><section class="site-footer__contact" aria-label="Contact"><h3>Contact</h3><a href="mailto:contact@kavrynt.com">contact@kavrynt.com</a><address>Indirapuram, Ghaziabad<br>UP, India</address></section></div><div class="shell site-footer__bottom">Copyright &copy; 2026 Kavrynt. All rights reserved.</div></footer>
+<footer class="site-footer"><div class="shell site-footer__grid"><section><h2>Kavrynt</h2><p>Kubernetes-native infrastructure for registering, discovering, and routing Model Context Protocol servers.</p></section><nav aria-label="Documentation"><h3>Documentation</h3><a href="https://docs.kavrynt.com/installation/">Installation</a><a href="https://docs.kavrynt.com/architecture/">Architecture</a><a href="https://docs.kavrynt.com/release-notes/">Release notes</a></nav><nav aria-label="Product"><h3>Product</h3><a href="quickstart.html">Quickstart</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a><a href="contact.html">Contact</a></nav><section class="site-footer__contact" aria-label="Contact"><h3>Contact</h3><a href="mailto:contact@kavrynt.com">contact@kavrynt.com</a><address>Indirapuram, Ghaziabad<br>UP, India</address></section></div><div class="shell site-footer__bottom">Copyright &copy; 2026 Kavrynt. All rights reserved.</div></footer>
 <script src="assets/js/main.js"></script>
 </body>
 </html>
