@@ -23,7 +23,7 @@
 <div>
 <div class="eyebrow">DEPLOY. SECURE. OPERATE.</div>
 <h1>MCP<br><em>control</em><br>plane.</h1>
-<p>Kavrynt helps platform teams register, operate, and route production MCP servers for AI agents on Kubernetes. Kavrynt is a private commercial SaaS product with approved alpha and beta trial images for developer evaluation.</p>
+<p>Kavrynt helps platform teams register, operate, and route MCP servers for AI agents on Kubernetes. The Kavrynt Runtime installs in your cluster today as a signed beta; Kavrynt Cloud, the hosted control plane, is in development.</p>
 <div class="actions"><a class="btn primary" href="quickstart.html">Run trial images</a><a class="btn" href="https://docs.kavrynt.com/">Read docs</a></div>
 <div class="meta">MCP &middot; KUBERNETES &middot; AI AGENTS &middot; CONTROL PLANE</div>
 </div>
@@ -55,7 +55,7 @@
 <div class="connector"><i></i></div>
 <div class="stage" data-stage="6"><small>06 &middot; AGENT</small><strong>MCP Traffic</strong><label>HTTP proxy</label><em>ROUTED</em></div>
 </div>
-<div class="control"><b>&#9670; Kavrynt</b><span>MCPServer API</span><span>Gateway routing</span><span>Kubernetes CRD</span><span>Helm install</span><span>Cloud or local</span></div>
+<div class="control"><b>&#9670; Kavrynt</b><span>MCPServer API</span><span>Gateway routing</span><span>Kubernetes CRD</span><span>Helm install</span><span>Kubernetes 1.29+</span></div>
 <div class="caption">One resource. &middot; One Gateway. &middot; One Kubernetes-native control loop.</div>
 </div>
 </section>
@@ -65,7 +65,7 @@
 <div class="cards">
 <article><b>01</b><h3>MCPServer</h3><p>Kubernetes resource that declares an MCP server, validated at admission.</p></article>
 <article><b>02</b><h3>kavryctl</h3><p>CLI for validating, registering, and inspecting MCP servers through your kubeconfig.</p></article>
-<article><b>03</b><h3>Gateway</h3><p>Data-plane entry point that routes AI client traffic to MCP servers.</p></article>
+<article><b>03</b><h3>Gateway</h3><p>Data-plane entry point that routes AI client traffic to MCP servers and never forwards caller credentials.</p></article>
 <article><b>04</b><h3>Operator</h3><p>Kubernetes controller that validates MCPServer resources and reports readiness.</p></article>
 </div>
 </section>
@@ -83,11 +83,11 @@ kubectl get deployments -n kavrynt-system</code></pre></div>
 </div></section>
 
 <section class="section shell">
-<div class="head reveal"><div class="eyebrow">ARCHITECTURE</div><h2>Built for Kubernetes first,<br><em>then production hardening.</em></h2></div>
+<div class="head reveal"><div class="eyebrow">ARCHITECTURE</div><h2>Runtime in your cluster,<br><em>control plane in the cloud.</em></h2><p>MCP traffic never leaves your cluster. Kavrynt Cloud will receive inventory and usage metadata, not tool payloads.</p></div>
 <div class="architecture reveal">
-<div><b>01</b><h3>Developer</h3><p>Declares MCP servers with kubectl, GitOps, or kavryctl.</p><span>MCPServer</span></div>
-<div class="active"><b>02</b><h3>Control Plane</h3><p>The Operator validates servers and reports readiness.</p><span>Kavrynt</span></div>
-<div><b>03</b><h3>Data Plane</h3><p>Gateway exposes stable MCP routing for AI clients.</p><span>MCP</span></div>
+<div><b>01</b><h3>Declare</h3><p>Teams declare MCP servers as MCPServer resources with kubectl, GitOps, or kavryctl. The Operator validates them and reports readiness.</p><span>Available &middot; beta</span></div>
+<div class="active"><b>02</b><h3>Route</h3><p>The Gateway in your cluster routes AI client traffic to ready MCP servers from a read-only Kubernetes watch.</p><span>Available &middot; beta</span></div>
+<div><b>03</b><h3>Govern</h3><p>Kavrynt Cloud adds sign-in, cross-cluster inventory, MCP traffic visibility, and audit across clusters.</p><span>In development</span></div>
 </div>
 </section>
 
