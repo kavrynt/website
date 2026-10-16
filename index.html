@@ -76,7 +76,7 @@
 # kind create cluster --name kavrynt-trial
 
 helm upgrade --install kavrynt oci://registry-1.docker.io/kavrynt/kavrynt \
-  --version 0.0.2-beta.1 \
+  --version 0.0.3-beta.1 \
   --namespace kavrynt-system --create-namespace --wait
 
 kubectl get deployments -n kavrynt-system</code></pre></div>
