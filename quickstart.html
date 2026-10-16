@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Install the Kavrynt 0.0.2-beta.1 Helm chart on any Kubernetes cluster, or on Kind for local testing.">
+<meta name="description" content="Install the Kavrynt 0.0.3-beta.1 Helm chart on any Kubernetes cluster, or on Kind for local testing.">
 <title>Quickstart - Kavrynt</title>
 <link rel="icon" href="assets/img/kavrynt-logo.png">
 <link rel="stylesheet" href="assets/css/style.css">
@@ -20,7 +20,7 @@
 
 <main>
 <section class="inner shell reveal">
-<div class="eyebrow">QUICKSTART &middot; 0.0.2-BETA.1</div>
+<div class="eyebrow">QUICKSTART &middot; 0.0.3-BETA.1</div>
 <h1>Run Kavrynt<br><em>on Kubernetes.</em></h1>
 <p>Install the signed beta chart on EKS, AKS, GKE, OpenShift, self-managed clusters, or Kind. No source access is needed.</p>
 </section>
@@ -42,7 +42,7 @@ kind create cluster --name kavrynt-trial</code></pre>
 <h2>Install Kavrynt</h2>
 <p>One chart installs the MCPServer CRD, the Operator, and the Gateway from signed, multi-architecture images.</p>
 <pre><code>helm upgrade --install kavrynt oci://registry-1.docker.io/kavrynt/kavrynt \
-  --version 0.0.2-beta.1 \
+  --version 0.0.3-beta.1 \
   --namespace kavrynt-system --create-namespace --wait
 
 kubectl get deployments -n kavrynt-system</code></pre>
