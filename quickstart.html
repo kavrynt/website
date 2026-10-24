@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Install the Kavrynt 1.0.0-beta.1 Helm chart on any Kubernetes cluster, or on Kind for local testing.">
+<meta name="description" content="Install the Kavrynt 1.0.0-beta.2 Helm chart on any Kubernetes cluster, or on Kind for local testing.">
 <title>Quickstart - Kavrynt</title>
 <link rel="icon" href="assets/img/kavrynt-logo.png">
 <link rel="stylesheet" href="assets/css/style.css">
@@ -20,7 +20,7 @@
 
 <main>
 <section class="inner shell reveal">
-<div class="eyebrow">QUICKSTART &middot; 1.0.0-BETA.1</div>
+<div class="eyebrow">QUICKSTART &middot; 1.0.0-BETA.2</div>
 <h1>Run Kavrynt<br><em>on Kubernetes.</em></h1>
 <p>Install the signed beta chart on EKS, AKS, GKE, OpenShift, self-managed clusters, or Kind. No source access is needed.</p>
 </section>
@@ -43,14 +43,14 @@ kind create cluster --name kavrynt-trial</code></pre>
 <p>One chart installs the MCPServer CRD, the Operator, and the Gateway from signed, multi-architecture images. MCP client authentication is on by default: name your identity provider, or opt out for a local trial.</p>
 <pre><code># With your identity provider
 helm upgrade --install kavrynt oci://registry-1.docker.io/kavrynt/kavrynt \
-  --version 1.0.0-beta.1 \
+  --version 1.0.0-beta.2 \
   --namespace kavrynt-system --create-namespace --wait \
   --set gateway.auth.resourceURL=https://mcp.example.com \
   --set-json 'gateway.auth.issuers=[{"issuer":"https://login.example.com/realms/agents"}]'
 
 # Local trial: MCP routes accept unauthenticated calls
 helm upgrade --install kavrynt oci://registry-1.docker.io/kavrynt/kavrynt \
-  --version 1.0.0-beta.1 \
+  --version 1.0.0-beta.2 \
   --namespace kavrynt-system --create-namespace --wait \
   --set gateway.auth.enabled=false
 
