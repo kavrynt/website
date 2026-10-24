@@ -23,7 +23,7 @@
 <div>
 <div class="eyebrow">DEPLOY. SECURE. OPERATE.</div>
 <h1>MCP<br><em>control</em><br>plane.</h1>
-<p>Kavrynt helps platform teams register, operate, and route MCP servers for AI agents on Kubernetes. The Kavrynt Runtime installs in your cluster today as a signed beta; Kavrynt Cloud, the hosted control plane, is in development.</p>
+<p>Kavrynt helps platform teams register, secure, and route MCP servers for AI agents on Kubernetes. The Kavrynt Runtime installs in your cluster today as a signed beta: it authenticates every agent, decides each tool call with your policy, and audits it. Kavrynt Cloud, the hosted control plane, is in development.</p>
 <div class="actions"><a class="btn primary" href="quickstart.html">Run trial images</a><a class="btn" href="https://docs.kavrynt.com/">Read docs</a></div>
 <div class="meta">MCP &middot; KUBERNETES &middot; AI AGENTS &middot; CONTROL PLANE</div>
 </div>
@@ -31,7 +31,7 @@
 <div class="hero-card">
 <small>KAVRYNT CONTROL PLANE</small>
 <div class="hero-flow"><b>MCPServer</b><i></i><b class="cyan">Operator</b><i></i><b class="violet">Gateway</b></div>
-<footer>Declare MCP servers -> validate -> route agent traffic</footer>
+<footer>Declare MCP servers -> authenticate agents -> authorize tool calls -> route</footer>
 </div>
 </div>
 </section>
@@ -55,7 +55,7 @@
 <div class="connector"><i></i></div>
 <div class="stage" data-stage="6"><small>06 &middot; AGENT</small><strong>MCP Traffic</strong><label>HTTP proxy</label><em>ROUTED</em></div>
 </div>
-<div class="control"><b>&#9670; Kavrynt</b><span>MCPServer API</span><span>Gateway routing</span><span>Kubernetes CRD</span><span>Helm install</span><span>Kubernetes 1.29+</span></div>
+<div class="control"><b>&#9670; Kavrynt</b><span>MCPServer API</span><span>OAuth 2.1 agents</span><span>Rego tool policy</span><span>Audit events</span><span>Helm install</span><span>Kubernetes 1.29+</span></div>
 <div class="caption">One resource. &middot; One Gateway. &middot; One Kubernetes-native control loop.</div>
 </div>
 </section>
@@ -64,37 +64,42 @@
 <div class="head reveal"><div class="eyebrow">COMPONENTS</div><h2>Small pieces with<br><em>clear responsibilities.</em></h2></div>
 <div class="cards">
 <article><b>01</b><h3>MCPServer</h3><p>Kubernetes resource that declares an MCP server, validated at admission.</p></article>
-<article><b>02</b><h3>kavryctl</h3><p>CLI for validating, registering, and inspecting MCP servers through your kubeconfig.</p></article>
-<article><b>03</b><h3>Gateway</h3><p>Data-plane entry point that routes AI client traffic to MCP servers and never forwards caller credentials.</p></article>
-<article><b>04</b><h3>Operator</h3><p>Kubernetes controller that validates MCPServer resources and reports readiness.</p></article>
+<article><b>02</b><h3>kavryctl</h3><p>CLI for validating and registering MCP servers, verifying audit chains, and upgrading Kavrynt with checks.</p></article>
+<article><b>03</b><h3>Gateway</h3><p>Data-plane entry point that authenticates AI agents, applies your tool policy, audits every call, and routes it to the MCP server without forwarding the caller's credentials.</p></article>
+<article><b>04</b><h3>Operator</h3><p>Kubernetes controller that validates MCPServer resources, reports readiness, and discovers each server's tools.</p></article>
 </div>
 </section>
 
 <section class="dark-section"><div class="section shell">
-<div class="head center reveal"><div class="eyebrow">TRIAL IMAGES FOR KUBERNETES</div><h2>Run Kavrynt on Kubernetes</h2><p>Install the signed beta chart into your own cluster. Kind is useful when you want a disposable local cluster on your laptop.</p></div>
-<div class="code-panel reveal"><pre><code># Local testing only
-# kind create cluster --name kavrynt-trial
-
+<div class="head center reveal"><div class="eyebrow">TRIAL IMAGES FOR KUBERNETES</div><h2>Run Kavrynt on Kubernetes</h2><p>Install the signed beta chart into your own cluster. Agents authenticate with your identity provider; a local trial on Kind can opt out.</p></div>
+<div class="code-panel reveal"><pre><code># With your identity provider
 helm upgrade --install kavrynt oci://registry-1.docker.io/kavrynt/kavrynt \
-  --version 0.0.3-beta.1 \
-  --namespace kavrynt-system --create-namespace --wait
+  --version 1.0.0-beta.1 \
+  --namespace kavrynt-system --create-namespace --wait \
+  --set gateway.auth.resourceURL=https://mcp.example.com \
+  --set-json 'gateway.auth.issuers=[{"issuer":"https://login.example.com/realms/agents"}]'
 
-kubectl get deployments -n kavrynt-system</code></pre></div>
+# Local trial on Kind, without authentication
+kind create cluster --name kavrynt-trial
+helm upgrade --install kavrynt oci://registry-1.docker.io/kavrynt/kavrynt \
+  --version 1.0.0-beta.1 \
+  --namespace kavrynt-system --create-namespace --wait \
+  --set gateway.auth.enabled=false</code></pre></div>
 </div></section>
 
 <section class="section shell">
 <div class="head reveal"><div class="eyebrow">ARCHITECTURE</div><h2>Runtime in your cluster,<br><em>control plane in the cloud.</em></h2><p>MCP traffic never leaves your cluster. Kavrynt Cloud will receive inventory and usage metadata, not tool payloads.</p></div>
 <div class="architecture reveal">
 <div><b>01</b><h3>Declare</h3><p>Teams declare MCP servers as MCPServer resources with kubectl, GitOps, or kavryctl. The Operator validates them and reports readiness.</p><span>Available &middot; beta</span></div>
-<div class="active"><b>02</b><h3>Route</h3><p>The Gateway in your cluster routes AI client traffic to ready MCP servers from a read-only Kubernetes watch.</p><span>Available &middot; beta</span></div>
-<div><b>03</b><h3>Govern</h3><p>Kavrynt Cloud adds sign-in, cross-cluster inventory, MCP traffic visibility, and audit across clusters.</p><span>In development</span></div>
+<div class="active"><b>02</b><h3>Secure and route</h3><p>The Gateway in your cluster authenticates agents with OAuth 2.1, decides each tool call with Rego policy, writes a tamper-evident audit event, and routes the call to a ready MCP server.</p><span>Available &middot; beta</span></div>
+<div><b>03</b><h3>Govern</h3><p>Kavrynt Cloud adds sign-in, cross-cluster inventory, central policy, approvals, and audit storage across clusters.</p><span>In development</span></div>
 </div>
 </section>
 
 <section class="cta"><div class="shell center"><div class="eyebrow">COMMERCIAL TRIAL</div><h2>Bring control<br><em>to MCP operations.</em></h2><p>Kavrynt is ready for early MVP testing by developers who want to run MCP infrastructure on Kubernetes, from local Kind clusters to managed cloud clusters.</p><div class="actions center"><a class="btn primary" href="quickstart.html">Start quickstart</a><a class="btn" href="https://docs.kavrynt.com/">Review product docs</a></div></div></section>
 </main>
 
-<footer class="site-footer"><div class="shell site-footer__grid"><section><h2>Kavrynt</h2><p>Kubernetes-native infrastructure for registering, discovering, and routing Model Context Protocol servers.</p></section><nav aria-label="Documentation"><h3>Documentation</h3><a href="https://docs.kavrynt.com/installation/">Installation</a><a href="https://docs.kavrynt.com/architecture/">Architecture</a><a href="https://docs.kavrynt.com/release-notes/">Release notes</a></nav><nav aria-label="Product"><h3>Product</h3><a href="quickstart.html">Quickstart</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a><a href="contact.html">Contact</a></nav><section class="site-footer__contact" aria-label="Contact"><h3>Contact</h3><a href="mailto:contact@kavrynt.com">contact@kavrynt.com</a><address>Indirapuram, Ghaziabad<br>UP, India</address></section></div><div class="shell site-footer__bottom">Copyright &copy; 2026 Kavrynt. All rights reserved.</div></footer>
+<footer class="site-footer"><div class="shell site-footer__grid"><section><h2>Kavrynt</h2><p>Kubernetes-native infrastructure for registering, securing, and routing Model Context Protocol servers.</p></section><nav aria-label="Documentation"><h3>Documentation</h3><a href="https://docs.kavrynt.com/installation/">Installation</a><a href="https://docs.kavrynt.com/architecture/">Architecture</a><a href="https://docs.kavrynt.com/release-notes/">Release notes</a></nav><nav aria-label="Product"><h3>Product</h3><a href="quickstart.html">Quickstart</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a><a href="contact.html">Contact</a></nav><section class="site-footer__contact" aria-label="Contact"><h3>Contact</h3><a href="mailto:contact@kavrynt.com">contact@kavrynt.com</a><address>Indirapuram, Ghaziabad<br>UP, India</address></section></div><div class="shell site-footer__bottom">Copyright &copy; 2026 Kavrynt. All rights reserved.</div></footer>
 <script src="assets/js/main.js"></script>
 </body>
 </html>
