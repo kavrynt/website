@@ -19,11 +19,11 @@ instead of source code access:
 
 ```bash
 export KAVRYNT_IMAGE_REGISTRY=docker.io/kavrynt
-export KAVRYNT_TRIAL_TAG=0.0.1-beta.1
+export KAVRYNT_TRIAL_TAG=1.0.0-beta.1
 ```
 
 ## MVP visual
 
-kavryctl -> Kubernetes -> MCPServer -> Operator -> Registry -> Gateway -> MCP traffic
+kavryctl -> Kubernetes -> MCPServer -> Operator -> Gateway -> MCP traffic
 
 The pipeline animation is pure CSS/JavaScript and loops continuously.

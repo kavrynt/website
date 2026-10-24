@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Install the Kavrynt 0.0.3-beta.1 Helm chart on any Kubernetes cluster, or on Kind for local testing.">
+<meta name="description" content="Install the Kavrynt 1.0.0-beta.1 Helm chart on any Kubernetes cluster, or on Kind for local testing.">
 <title>Quickstart - Kavrynt</title>
 <link rel="icon" href="assets/img/kavrynt-logo.png">
 <link rel="stylesheet" href="assets/css/style.css">
@@ -20,7 +20,7 @@
 
 <main>
 <section class="inner shell reveal">
-<div class="eyebrow">QUICKSTART &middot; 0.0.3-BETA.1</div>
+<div class="eyebrow">QUICKSTART &middot; 1.0.0-BETA.1</div>
 <h1>Run Kavrynt<br><em>on Kubernetes.</em></h1>
 <p>Install the signed beta chart on EKS, AKS, GKE, OpenShift, self-managed clusters, or Kind. No source access is needed.</p>
 </section>
@@ -29,7 +29,7 @@
 <article>
 <b>01</b>
 <h2>Before you begin</h2>
-<p>You need Kubernetes 1.29+, <code>kubectl</code>, and Helm 3.8+. Docker and Kind are only needed for a local test cluster.</p>
+<p>You need Kubernetes 1.29+, <code>kubectl</code>, and Helm 3.14+. Docker and Kind are only needed for a local test cluster. To authenticate agents, you need an OAuth 2.1 identity provider that issues JWT access tokens.</p>
 <pre><code>kubectl config current-context
 helm version --short
 
@@ -40,10 +40,19 @@ kind create cluster --name kavrynt-trial</code></pre>
 <article>
 <b>02</b>
 <h2>Install Kavrynt</h2>
-<p>One chart installs the MCPServer CRD, the Operator, and the Gateway from signed, multi-architecture images.</p>
-<pre><code>helm upgrade --install kavrynt oci://registry-1.docker.io/kavrynt/kavrynt \
-  --version 0.0.3-beta.1 \
-  --namespace kavrynt-system --create-namespace --wait
+<p>One chart installs the MCPServer CRD, the Operator, and the Gateway from signed, multi-architecture images. MCP client authentication is on by default: name your identity provider, or opt out for a local trial.</p>
+<pre><code># With your identity provider
+helm upgrade --install kavrynt oci://registry-1.docker.io/kavrynt/kavrynt \
+  --version 1.0.0-beta.1 \
+  --namespace kavrynt-system --create-namespace --wait \
+  --set gateway.auth.resourceURL=https://mcp.example.com \
+  --set-json 'gateway.auth.issuers=[{"issuer":"https://login.example.com/realms/agents"}]'
+
+# Local trial: MCP routes accept unauthenticated calls
+helm upgrade --install kavrynt oci://registry-1.docker.io/kavrynt/kavrynt \
+  --version 1.0.0-beta.1 \
+  --namespace kavrynt-system --create-namespace --wait \
+  --set gateway.auth.enabled=false
 
 kubectl get deployments -n kavrynt-system</code></pre>
 </article>
@@ -70,19 +79,22 @@ kubectl get mcpservers</code></pre>
 <article>
 <b>04</b>
 <h2>Route through the Gateway</h2>
-<p>Each Ready server is routed at <code>/mcp/&lt;namespace&gt;.&lt;name&gt;</code>. Caller credentials are never forwarded to MCP servers.</p>
+<p>Each Ready server is routed at <code>/mcp/&lt;namespace&gt;.&lt;name&gt;</code>. Agents send an access token for that route; caller credentials are never forwarded to MCP servers. The console is at <code>/ui/</code>.</p>
 <pre><code>kubectl port-forward -n kavrynt-system svc/kavrynt-gateway 18080:8080 &amp;
-curl -fsS http://127.0.0.1:18080/v1/routes</code></pre>
+curl -fsS http://127.0.0.1:18080/v1/routes
+# console: http://127.0.0.1:18080/ui/  user: admin  password:
+kubectl -n kavrynt-system get secret kavrynt-gateway-console-admin \
+  -o jsonpath='{.data.password}' | base64 -d</code></pre>
 </article>
 </section>
 
 <section class="section shell">
 <div class="head reveal"><div class="eyebrow">FULL GUIDE</div><h2>Step-by-step runbook<br><em>with expected output.</em></h2></div>
-<p class="note">The <a href="https://docs.kavrynt.com/quickstart/">documentation quickstart</a> includes a test backend, expected results, cleanup, and troubleshooting. The beta is for evaluation in trusted clusters: the Gateway does not authenticate clients or enforce policy yet.</p>
+<p class="note">The <a href="https://docs.kavrynt.com/quickstart/">documentation quickstart</a> includes a test backend, expected results, cleanup, and troubleshooting. The beta is for evaluation in development and staging clusters. Tool authorization policy, audit events, and credentials for MCP servers are covered in the <a href="https://docs.kavrynt.com/security/">security guide</a>.</p>
 </section>
 </main>
 
-<footer class="site-footer"><div class="shell site-footer__grid"><section><h2>Kavrynt</h2><p>Kubernetes-native infrastructure for registering, discovering, and routing Model Context Protocol servers.</p></section><nav aria-label="Documentation"><h3>Documentation</h3><a href="https://docs.kavrynt.com/installation/">Installation</a><a href="https://docs.kavrynt.com/architecture/">Architecture</a><a href="https://docs.kavrynt.com/release-notes/">Release notes</a></nav><nav aria-label="Product"><h3>Product</h3><a href="quickstart.html">Quickstart</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a><a href="contact.html">Contact</a></nav><section class="site-footer__contact" aria-label="Contact"><h3>Contact</h3><a href="mailto:contact@kavrynt.com">contact@kavrynt.com</a><address>Indirapuram, Ghaziabad<br>UP, India</address></section></div><div class="shell site-footer__bottom">Copyright &copy; 2026 Kavrynt. All rights reserved.</div></footer>
+<footer class="site-footer"><div class="shell site-footer__grid"><section><h2>Kavrynt</h2><p>Kubernetes-native infrastructure for registering, securing, and routing Model Context Protocol servers.</p></section><nav aria-label="Documentation"><h3>Documentation</h3><a href="https://docs.kavrynt.com/installation/">Installation</a><a href="https://docs.kavrynt.com/architecture/">Architecture</a><a href="https://docs.kavrynt.com/release-notes/">Release notes</a></nav><nav aria-label="Product"><h3>Product</h3><a href="quickstart.html">Quickstart</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a><a href="contact.html">Contact</a></nav><section class="site-footer__contact" aria-label="Contact"><h3>Contact</h3><a href="mailto:contact@kavrynt.com">contact@kavrynt.com</a><address>Indirapuram, Ghaziabad<br>UP, India</address></section></div><div class="shell site-footer__bottom">Copyright &copy; 2026 Kavrynt. All rights reserved.</div></footer>
 <script src="assets/js/main.js"></script>
 </body>
 </html>
