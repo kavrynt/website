@@ -19,7 +19,7 @@ instead of source code access:
 
 ```bash
 export KAVRYNT_IMAGE_REGISTRY=docker.io/kavrynt
-export KAVRYNT_TRIAL_TAG=1.0.0-beta.1
+export KAVRYNT_TRIAL_TAG=1.0.0-beta.2
 ```
 
 ## MVP visual
