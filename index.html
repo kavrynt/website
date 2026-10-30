@@ -74,7 +74,7 @@
 <div class="head center reveal"><div class="eyebrow">TRIAL IMAGES FOR KUBERNETES</div><h2>Run Kavrynt on Kubernetes</h2><p>Install the signed beta chart into your own cluster. Agents authenticate with your identity provider; a local trial on Kind can opt out.</p></div>
 <div class="code-panel reveal"><pre><code># With your identity provider
 helm upgrade --install kavrynt oci://registry-1.docker.io/kavrynt/kavrynt \
-  --version 1.0.0-beta.2 \
+  --version 1.0.0-beta.3 \
   --namespace kavrynt-system --create-namespace --wait \
   --set gateway.auth.resourceURL=https://mcp.example.com \
   --set-json 'gateway.auth.issuers=[{"issuer":"https://login.example.com/realms/agents"}]'
@@ -82,7 +82,7 @@ helm upgrade --install kavrynt oci://registry-1.docker.io/kavrynt/kavrynt \
 # Local trial on Kind, without authentication
 kind create cluster --name kavrynt-trial
 helm upgrade --install kavrynt oci://registry-1.docker.io/kavrynt/kavrynt \
-  --version 1.0.0-beta.2 \
+  --version 1.0.0-beta.3 \
   --namespace kavrynt-system --create-namespace --wait \
   --set gateway.auth.enabled=false</code></pre></div>
 </div></section>
@@ -96,7 +96,7 @@ helm upgrade --install kavrynt oci://registry-1.docker.io/kavrynt/kavrynt \
 </div>
 </section>
 
-<section class="cta"><div class="shell center"><div class="eyebrow">COMMERCIAL TRIAL</div><h2>Bring control<br><em>to MCP operations.</em></h2><p>Kavrynt is ready for early MVP testing by developers who want to run MCP infrastructure on Kubernetes, from local Kind clusters to managed cloud clusters.</p><div class="actions center"><a class="btn primary" href="quickstart.html">Start quickstart</a><a class="btn" href="https://docs.kavrynt.com/">Review product docs</a></div></div></section>
+<section class="cta"><div class="shell center"><div class="eyebrow">COMMERCIAL TRIAL</div><h2>Bring control<br><em>to MCP operations.</em></h2><p>Kavrynt is in public beta for developers and platform teams who want to run MCP infrastructure on Kubernetes, from local Kind clusters to managed cloud clusters. Try it in a development or evaluation cluster with the <a href="https://docs.kavrynt.com/testing/">testing runbook</a> and tell us what you need before production.</p><div class="actions center"><a class="btn primary" href="quickstart.html">Start quickstart</a><a class="btn" href="https://docs.kavrynt.com/">Review product docs</a></div></div></section>
 </main>
 
 <footer class="site-footer"><div class="shell site-footer__grid"><section><h2>Kavrynt</h2><p>Kubernetes-native infrastructure for registering, securing, and routing Model Context Protocol servers.</p></section><nav aria-label="Documentation"><h3>Documentation</h3><a href="https://docs.kavrynt.com/installation/">Installation</a><a href="https://docs.kavrynt.com/architecture/">Architecture</a><a href="https://docs.kavrynt.com/release-notes/">Release notes</a></nav><nav aria-label="Product"><h3>Product</h3><a href="quickstart.html">Quickstart</a><a href="vision.html">Vision</a><a href="roadmap.html">Roadmap</a><a href="contact.html">Contact</a></nav><section class="site-footer__contact" aria-label="Contact"><h3>Contact</h3><a href="mailto:contact@kavrynt.com">contact@kavrynt.com</a><address>Indirapuram, Ghaziabad<br>UP, India</address></section></div><div class="shell site-footer__bottom">Copyright &copy; 2026 Kavrynt. All rights reserved.</div></footer>
