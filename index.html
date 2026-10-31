@@ -60,6 +60,20 @@
 </div>
 </section>
 
+<section class="section shell" id="why">
+<div class="head reveal"><div class="eyebrow">WHY KAVRYNT</div><h2>A control plane for MCP,<br><em>not just a proxy.</em></h2><p>An MCP gateway gives agents one entry point. Kavrynt also gives platform teams a Kubernetes API for MCP servers, an Operator that knows what each one offers, and the tools to run it day to day. <a href="https://docs.kavrynt.com/why-kavrynt/">Read why Kavrynt</a>.</p></div>
+<div class="cards why">
+<article><b>01</b><h3>Kubernetes is the source of truth</h3><p>MCP servers are MCPServer resources, validated at admission and applied with kubectl, GitOps, or kavryctl. The Operator reports readiness and lists each server's tools, so kubectl get mcpservers is your inventory.</p></article>
+<article><b>02</b><h3>Caller tokens stay at the Gateway</h3><p>Agents' credentials never reach MCP servers. A server gets its own credential, pinned to its endpoint, or the caller's token exchanged for its own audience (RFC 8693).</p></article>
+<article><b>03</b><h3>One token, one server</h3><p>Every route has its own OAuth audience and Protected Resource Metadata, so a token for one MCP server is refused by the others. A shared Gateway audience is opt-in, for routes you list.</p></article>
+<article><b>04</b><h3>Secure by default, fail closed</h3><p>An install fails until you name your identity provider or opt out. Policy denies unless it allows, and errors deny. With audit on, no call is served without its record.</p></article>
+<article><b>05</b><h3>Decisions on every tool</h3><p>Rego policy in the Gateway decides each tool call from the verified caller, the tool, and its behavior hints, never its arguments. Each agent's tool list shows only what it may call.</p></article>
+<article><b>06</b><h3>Audit you can verify</h3><p>One hash-chained event per MCP request, without arguments, results, or tokens. kavryctl audit verify reports every gap, reordering, or altered event.</p></article>
+<article><b>07</b><h3>Team boundaries in shared clusters</h3><p>A server reaches only its own namespace unless you allow the pair. Cloud metadata, link-local, and loopback addresses are refused, and NetworkPolicies keep traffic on the Gateway.</p></article>
+<article><b>08</b><h3>In your cluster, built for day two</h3><p>MCP traffic never leaves your cluster. Open source under Apache 2.0, with doctor, export and import, checked upgrades, a tested high-availability profile, alerts with runbooks, and a console.</p></article>
+</div>
+</section>
+
 <section class="section shell">
 <div class="head reveal"><div class="eyebrow">COMPONENTS</div><h2>Small pieces with<br><em>clear responsibilities.</em></h2></div>
 <div class="cards">
