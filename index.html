@@ -74,7 +74,7 @@
 <div class="head center reveal"><div class="eyebrow">TRIAL IMAGES FOR KUBERNETES</div><h2>Run Kavrynt on Kubernetes</h2><p>Install the signed beta chart into your own cluster. Agents authenticate with your identity provider; a local trial on Kind can opt out.</p></div>
 <div class="code-panel reveal"><pre><code># With your identity provider
 helm upgrade --install kavrynt oci://registry-1.docker.io/kavrynt/kavrynt \
-  --version 1.0.0-beta.3 \
+  --version 1.0.0-beta.4 \
   --namespace kavrynt-system --create-namespace --wait \
   --set gateway.auth.resourceURL=https://mcp.example.com \
   --set-json 'gateway.auth.issuers=[{"issuer":"https://login.example.com/realms/agents"}]'
@@ -82,7 +82,7 @@ helm upgrade --install kavrynt oci://registry-1.docker.io/kavrynt/kavrynt \
 # Local trial on Kind, without authentication
 kind create cluster --name kavrynt-trial
 helm upgrade --install kavrynt oci://registry-1.docker.io/kavrynt/kavrynt \
-  --version 1.0.0-beta.3 \
+  --version 1.0.0-beta.4 \
   --namespace kavrynt-system --create-namespace --wait \
   --set gateway.auth.enabled=false</code></pre></div>
 </div></section>
