@@ -5,7 +5,7 @@ cat >&2 <<'EOF'
 Kavrynt installs with Helm; there is no script installer.
 
   helm upgrade --install kavrynt oci://registry-1.docker.io/kavrynt/kavrynt \
-    --version 1.0.0-beta.3 \
+    --version 1.0.0-beta.4 \
     --namespace kavrynt-system --create-namespace --wait \
     --set gateway.auth.resourceURL=https://mcp.example.com \
     --set-json 'gateway.auth.issuers=[{"issuer":"https://login.example.com/realms/agents"}]'
