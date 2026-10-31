@@ -38,6 +38,6 @@ header{height:64px;position:sticky;top:0;z-index:20;background:linear-gradient(9
 @media(max-width:600px){.site-footer__grid{grid-template-columns:1fr;gap:1.5rem;padding:2rem 0}.site-footer__bottom{padding-bottom:1rem}}
 .cards.why article:nth-child(4n+1){border-left:1px solid var(--line)}
 .cards.why h3{margin-top:40px}
-#why .head a{color:var(--orange);text-decoration:underline;text-underline-offset:3px}
+#why .head a,.cards.why p a{color:var(--orange);text-decoration:underline;text-underline-offset:3px}
 @media(max-width:950px){.cards.why article:nth-child(odd){border-left:1px solid var(--line)}}
 @media(max-width:600px){.cards.why article:nth-child(n){border-left:0}}
